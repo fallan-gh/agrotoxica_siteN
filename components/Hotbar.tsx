@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/lib/cart';
 
 const EASE      = [0.22, 1, 0.36, 1] as const;
@@ -78,6 +79,11 @@ const Icon = {
       <polyline points="9 18 15 12 9 6"/>
     </svg>
   ),
+  Flame: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/>
+    </svg>
+  )
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -89,42 +95,87 @@ type NavItem = {
   label: string;
   href: string | null;
   badge: string | null;
+  isSpecial?: boolean; // 🚀 Flag para saber se é o botão dourado especial
 };
 
 function NavRow({
-  item, active, onSelect, index,
+  item, active, onSelect, index, isCIA
 }: {
   item: NavItem;
   active: string | null;
   onSelect: (id: string) => void;
   index: number;
+  isCIA: boolean; 
 }) {
   const isActive = active === item.id;
   const IconComp = item.icon;
+
+  // 🚀 LÓGICA DE CORES REFEITA PARA O FUNDO DOURADO
+  const isSpecialItem = item.isSpecial; // Se for o botão da CIA
+
+  // Cores Base dependendo da rota
+  const colorRouteContext = isCIA ? '#B08E68' : '#005BEC';
+  const bgRouteContextNormal = isCIA ? 'rgba(176,142,104,0.05)' : 'rgba(0,91,236,0.07)';
+  const bgRouteContextActive = 'rgba(176,142,104,0.12)'; // Fundo ativo padrão é dourado
+
+  // 1. Definição do Fundo do Botão (mainButtonBackground)
+  // 2. Definição da Cor do Texto e Ícone (contentColor)
+  // 3. Definição do Fundo do Ícone (iconBgColor)
+
+  let mainButtonBackground = 'transparent';
+  let contentColor = isActive ? '#B08E68' : colorRouteContext;
+  let iconBgColor = isActive ? bgRouteContextActive : bgRouteContextNormal;
+
+  // Se o item for o Especial (CIA 2026), ignoramos a rota e aplicamos o Ouro Maciço
+  if (isSpecialItem) {
+    // 🚀 APLICANDO O FUNDO DOURADO TIPO "BARRA DE OURO"
+    mainButtonBackground = 'linear-gradient(135deg, #B08E68 0%, #866846 100%)';
+    contentColor = '#110D09'; // 🚀 TEXTO ESCURO PARA CONTRASTE NO OURO
+    iconBgColor = 'transparent'; // Fundo do icone se dissolve no botao
+  }
 
   const inner = (
     <motion.button
       onClick={() => onSelect(item.id)}
       className="relative flex items-center gap-3 w-full rounded-xl px-2.5 py-2.5 group overflow-hidden"
-      style={{ background: isActive ? 'rgba(176,142,104,0.12)' : 'transparent' }}
-      whileHover={{ x: 3 }}
+      style={{ 
+        background: mainButtonBackground, // 🚀 Usando a variável dinâmica
+        border: isSpecialItem ? '1px solid rgba(247,242,235,0.1)' : 'none', // Adiciona borda sutil se for ouro
+        // Profundidade e sombra se for o ouro
+        boxShadow: isSpecialItem ? '0 4px 15px rgba(176,142,104,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' : 'none'
+      }}
+      // Se não for especial, move 3px. Se for especial (preenchido), pulsa
+      whileHover={{ 
+        x: isSpecialItem ? 0 : 3, 
+        scale: isSpecialItem ? 1.05 : 1 
+      }}
       whileTap={{ scale: 0.93 }}
       initial={{ opacity: 0, x: -14 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.38, delay: 0.03 * index, ease: EASE }}
     >
-      <motion.div
-        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-agro-gold"
-        animate={{ height: isActive ? '54%' : '0%' }}
-        transition={{ duration: 0.28, ease: EASE }}
-      />
-      <div className="absolute inset-0 rounded-xl bg-agro-blue/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* Indicador Ativo Esquerdo (Só mostra se NÃO for o item especial) */}
+      {!isSpecialItem && (
+        <motion.div
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] rounded-r-full bg-agro-gold"
+          animate={{ height: isActive ? '54%' : '0%' }}
+          transition={{ duration: 0.28, ease: EASE }}
+        />
+      )}
+
+      {/* Hover Background (Só mostra se NÃO for o item especial) */}
+      {!isSpecialItem && (
+        <div 
+          className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+          style={{ background: isCIA ? 'rgba(176,142,104,0.05)' : 'rgba(0,91,236,0.05)' }}
+        />
+      )}
 
       <div
         className="relative z-10 flex items-center justify-center w-7 h-7 rounded-lg flex-shrink-0 transition-all duration-300"
         style={{
-          color:      isActive ? '#B08E68' : 'var(--color-blue)',
-          background: isActive ? 'rgba(176,142,104,0.12)' : 'rgba(0,91,236,0.07)',
+          color:      contentColor, // 🚀 Variável dinâmica
+          background: iconBgColor,   // 🚀 Variável dinâmica
         }}
       >
         <IconComp />
@@ -135,7 +186,9 @@ function NavRow({
               className="absolute -top-1 -right-1 min-w-[14px] h-[14px] px-[3px] flex items-center justify-center rounded-full font-space font-bold text-white"
               style={{
                 fontSize: 7,
-                background: !isNaN(Number(item.badge)) ? '#005BEC' : '#B08E68',
+                // No botão especial, o badge vira escuro no fundo dourado
+                background: !isNaN(Number(item.badge)) ? (isSpecialItem ? '#110D09' : contentColor) : '#B08E68',
+                color: (!isNaN(Number(item.badge)) && isSpecialItem) ? '#B08E68' : '#FFF'
               }}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -149,13 +202,13 @@ function NavRow({
       </div>
 
       <span
-        className="relative z-10 font-space font-bold text-[11px] uppercase tracking-wider whitespace-nowrap text-agro-blue"
-        style={{ color: isActive ? '#B08E68' : undefined }}
+        className="relative z-10 font-space font-bold text-[11px] uppercase tracking-wider whitespace-nowrap"
+        style={{ color: contentColor }} // 🚀 Variável dinâmica
       >
         {item.label}
       </span>
 
-      <span className="relative z-10 ml-auto opacity-20 group-hover:opacity-50 text-agro-gold transition-opacity">
+      <span className="relative z-10 ml-auto opacity-20 group-hover:opacity-50 transition-opacity" style={{ color: contentColor }}>
         <Icon.ChevronRight />
       </span>
     </motion.button>
@@ -171,26 +224,33 @@ function NavRow({
   return inner;
 }
 
-const glassStyle: React.CSSProperties = {
-  background:           'rgba(255,255,255,0.07)',
-  backdropFilter:       'blur(28px) saturate(180%)',
-  WebkitBackdropFilter: 'blur(28px) saturate(180%)',
-  border:               '1px solid rgba(0,91,236,0.12)',
-  boxShadow:            '0 8px 40px rgba(0,0,0,0.16), 0 1px 0 rgba(255,255,255,0.06) inset',
-};
-
 export default function Hotbar() {
   const [isDark,   setIsDark]   = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [active,   setActive]   = useState<string | null>('home');
 
   const { count: cartCount } = useCart();
+  const pathname = usePathname(); 
+
+  const isCIA = pathname === '/cia';
+
+  const dynamicGlassStyle: React.CSSProperties = {
+    background:           'rgba(255,255,255,0.07)',
+    backdropFilter:       'blur(28px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(28px) saturate(180%)',
+    border:               `1px solid ${isCIA ? 'rgba(176,142,104,0.2)' : 'rgba(0,91,236,0.12)'}`,
+    boxShadow:            '0 8px 40px rgba(0,0,0,0.16), 0 1px 0 rgba(255,255,255,0.06) inset',
+  };
 
   const NAV_GROUPS: NavItem[][] = [
     [
-      { id: 'home',     icon: Icon.Home,      label: 'Início',   href: '/inicio',           badge: null },
-      { id: 'vitrine',  icon: Icon.Store,     label: 'Vitrine',  href: '/?skipIntro=true',  badge: 'NEW' },
-      { id: 'search',   icon: Icon.Search,    label: 'Buscar',   href: '/busca',            badge: null },
+      { id: 'home',     icon: Icon.Home,      label: 'Início',   href: '/inicio',          badge: null },
+      { id: 'vitrine',  icon: Icon.Store,     label: 'Vitrine',  href: '/?skipIntro=true', badge: 'NEW' },
+      { id: 'search',   icon: Icon.Search,    label: 'Buscar',   href: '/busca',           badge: null },
+    ],
+    [
+      // 🚀 Flag isSpecial: true adicionada para aplicar o fundo dourado maciço
+      { id: 'cia',      icon: Icon.Flame,     label: 'CIA 2026', href: '/cia',             badge: 'HOT', isSpecial: true },
     ],
     [
       {
@@ -255,7 +315,7 @@ export default function Hotbar() {
               key="pill"
               onClick={() => setExpanded(true)}
               className="relative flex items-center justify-center rounded-2xl overflow-hidden"
-              style={{ width: 46, height: 46, ...glassStyle }}
+              style={{ width: 46, height: 46, ...dynamicGlassStyle }}
               initial={{ opacity: 0, x: -24, scale: 0.75 }}
               animate={{ opacity: 1, x: 0,   scale: 1     }}
               exit={{     opacity: 0, x: -24, scale: 0.75 }}
@@ -269,14 +329,14 @@ export default function Hotbar() {
                 animate={{ opacity: [0.4, 0.8, 0.4] }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
-              <span className="relative z-10 text-agro-blue">
+              <span className="relative z-10" style={{ color: isCIA ? '#B08E68' : '#005BEC' }}>
                 <Icon.Menu />
               </span>
               <AnimatePresence>
                 {cartCount > 0 && (
                   <motion.span
-                    className="absolute -top-1 -right-1 min-w-[16px] h-4 px-[3px] flex items-center justify-center rounded-full font-space font-black text-white"
-                    style={{ fontSize: 8, background: '#005BEC' }}
+                    className="absolute -top-1 -right-1 min-w-[16px] h-4 px-[3px] flex items-center justify-center rounded-full font-space font-black"
+                    style={{ fontSize: 8, background: isCIA ? '#B08E68' : '#005BEC', color: isCIA ? '#110D09' : '#FFF' }}
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{   scale: 0, opacity: 0 }}
@@ -298,14 +358,14 @@ export default function Hotbar() {
             <motion.aside
               key="panel"
               className="relative flex flex-col rounded-[22px] overflow-hidden"
-              style={{ width: 196, ...glassStyle }}
+              style={{ width: 196, ...dynamicGlassStyle }}
               initial={{ opacity: 0, x: -30, scale: 0.9 }}
               animate={{ opacity: 1, x: 0,   scale: 1    }}
               exit={{     opacity: 0, x: -30, scale: 0.9 }}
               transition={{ duration: 0.42, ease: EASE }}
             >
               <div className="absolute top-0 inset-x-0 h-16 pointer-events-none rounded-t-[22px]"
-                style={{ background: 'linear-gradient(180deg, rgba(176,142,104,0.07) 0%, transparent 100%)' }}
+                style={{ background: `linear-gradient(180deg, rgba(176,142,104,0.07) 0%, transparent 100%)` }}
               />
               <div className="absolute inset-0 pointer-events-none rounded-[22px] opacity-[0.025]"
                 style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,1) 2px, rgba(255,255,255,1) 3px)' }}
@@ -328,18 +388,19 @@ export default function Hotbar() {
                   </div>
                   <motion.button
                     onClick={() => setExpanded(false)}
-                    className="w-6 h-6 flex items-center justify-center rounded-lg text-agro-blue/40 hover:text-agro-blue/80 transition-all"
+                    className="w-6 h-6 flex items-center justify-center rounded-lg transition-all"
+                    style={{ color: isCIA ? 'rgba(176,142,104,0.6)' : 'rgba(0,91,236,0.4)' }}
                     whileTap={{ scale: 0.85 }}
                   >
                     <Icon.Close />
                   </motion.button>
                 </div>
 
-                <div className="h-[1px] bg-agro-blue/10 mx-1 mb-1" />
+                <div className="h-[1px] mx-1 mb-1" style={{ background: isCIA ? 'rgba(176,142,104,0.15)' : 'rgba(0,91,236,0.1)' }} />
 
                 {NAV_GROUPS.map((group, gi) => (
                   <div key={gi}>
-                    {gi > 0 && <div className="h-[1px] bg-agro-blue/[0.08] mx-1 my-0.5" />}
+                    {gi > 0 && <div className="h-[1px] mx-1 my-0.5" style={{ background: isCIA ? 'rgba(176,142,104,0.1)' : 'rgba(0,91,236,0.08)' }} />}
                     {group.map((item, ii) => (
                       <NavRow
                         key={item.id}
@@ -347,12 +408,13 @@ export default function Hotbar() {
                         active={active}
                         onSelect={(id) => setActive(id)}
                         index={gi * 4 + ii}
+                        isCIA={isCIA} 
                       />
                     ))}
                   </div>
                 ))}
 
-                <div className="h-[1px] bg-agro-blue/10 mx-1 my-1" />
+                <div className="h-[1px] mx-1 my-1" style={{ background: isCIA ? 'rgba(176,142,104,0.15)' : 'rgba(0,91,236,0.1)' }} />
 
                 <motion.button
                   onClick={toggleTheme}
@@ -363,12 +425,15 @@ export default function Hotbar() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.38, delay: 0.24, ease: EASE }}
                 >
-                  <div className="absolute inset-0 rounded-xl bg-agro-blue/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div 
+                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+                    style={{ background: isCIA ? 'rgba(176,142,104,0.05)' : 'rgba(0,91,236,0.05)' }}
+                  />
                   <div
                     className="relative z-10 flex items-center justify-center w-7 h-7 rounded-lg flex-shrink-0 transition-all duration-500"
                     style={{
-                      color:      isDark ? '#B08E68' : 'var(--color-blue)',
-                      background: isDark ? 'rgba(176,142,104,0.12)' : 'rgba(0,91,236,0.07)',
+                      color:      isDark || isCIA ? '#B08E68' : '#005BEC',
+                      background: isDark ? 'rgba(176,142,104,0.12)' : (isCIA ? 'rgba(176,142,104,0.05)' : 'rgba(0,91,236,0.07)'),
                     }}
                   >
                     <AnimatePresence mode="wait">
@@ -383,13 +448,16 @@ export default function Hotbar() {
                       )}
                     </AnimatePresence>
                   </div>
-                  <span className="relative z-10 font-space font-bold text-[11px] uppercase tracking-wider text-agro-blue whitespace-nowrap">
+                  <span 
+                    className="relative z-10 font-space font-bold text-[11px] uppercase tracking-wider whitespace-nowrap"
+                    style={{ color: isDark || isCIA ? '#B08E68' : '#005BEC' }}
+                  >
                     {isDark ? 'Modo Claro' : 'Modo Escuro'}
                   </span>
                 </motion.button>
               </div>
               <div className="absolute bottom-0 inset-x-0 h-10 pointer-events-none rounded-b-[22px]"
-                style={{ background: 'linear-gradient(0deg, rgba(0,91,236,0.04) 0%, transparent 100%)' }}
+                style={{ background: `linear-gradient(0deg, ${isCIA ? 'rgba(176,142,104,0.04)' : 'rgba(0,91,236,0.04)'} 0%, transparent 100%)` }}
               />
             </motion.aside>
           )}
