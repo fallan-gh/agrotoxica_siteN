@@ -5,6 +5,7 @@ import {
   useMotionValue, useSpring, useTransform,
 } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // 🚀 1. IMPORT DO ROUTER DO NEXT.JS
 import { useCart, type CartItem } from '@/lib/cart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13,9 +14,6 @@ import { useCart, type CartItem } from '@/lib/cart';
 const E   = [0.22, 1, 0.36, 1]    as const;
 const EB  = [0.34, 1.56, 0.64, 1] as const;
 const ES  = [0.16, 1, 0.30, 1]    as const;
-
-// ── Cheers checkout URL — troque pela URL real do seu store no Cheers
-const CHEERS_URL = 'https://app.cheers.co/checkout';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DARK MODE HOOK
@@ -187,7 +185,6 @@ function CartRow({ item, index, onRemove, onQty }: {
       }}
       whileHover={{ borderColor: 'rgba(176,142,104,0.3)' }}
     >
-      {/* Hover shimmer */}
       <motion.div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
         style={{
@@ -198,7 +195,6 @@ function CartRow({ item, index, onRemove, onQty }: {
         transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
       />
 
-      {/* Delete sweep on remove */}
       {removing && (
         <motion.div
           className="absolute inset-0 z-20 pointer-events-none"
@@ -210,7 +206,6 @@ function CartRow({ item, index, onRemove, onQty }: {
       )}
 
       <div className="flex items-center gap-5 p-5">
-        {/* Image */}
         <motion.div
           className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-2xl overflow-hidden flex items-center justify-center"
           style={{
@@ -227,7 +222,6 @@ function CartRow({ item, index, onRemove, onQty }: {
           <img src={item.image} alt={item.nome}
             className="w-full h-full object-contain p-2"
           />
-          {/* Qty badge */}
           {item.qty > 1 && (
             <motion.div
               className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center font-space font-black text-[9px] text-white"
@@ -238,7 +232,6 @@ function CartRow({ item, index, onRemove, onQty }: {
           )}
         </motion.div>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -257,7 +250,6 @@ function CartRow({ item, index, onRemove, onQty }: {
                 )}
               </div>
             </div>
-            {/* Remove btn */}
             <motion.button
               onClick={handleRemove}
               className="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-agro-blue/25 hover:text-red-400 hover:bg-red-400/10 transition-all"
@@ -311,7 +303,6 @@ function EmptyCart() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6, ease: EB }}
     >
-      {/* Animated bag icon */}
       <div className="relative">
         <motion.div
           className="w-28 h-28 rounded-full flex items-center justify-center"
@@ -327,7 +318,6 @@ function EmptyCart() {
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
         </motion.div>
-        {/* Pulse rings */}
         {[1, 1.4, 1.8].map((scale, i) => (
           <motion.div key={i}
             className="absolute inset-0 rounded-full border border-agro-gold/15 pointer-events-none"
@@ -380,7 +370,7 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
   onCheckout: () => void;
 }) {
   const subtotal  = total;
-  const shipping  = total > 0 ? 0 : 0; // frete grátis (ajustar se necessário)
+  const shipping  = total > 0 ? 0 : 0; 
   const itemCount = items.reduce((acc, i) => acc + i.qty, 0);
 
   return (
@@ -399,18 +389,14 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
           : '0 8px 40px rgba(0,0,0,0.06), 0 1px 0 rgba(255,255,255,0.8) inset',
       }}
     >
-      {/* Top glow */}
       <div className="absolute top-0 inset-x-0 h-20 pointer-events-none rounded-t-3xl"
         style={{ background: 'linear-gradient(180deg, rgba(176,142,104,0.08) 0%, transparent 100%)' }}
       />
-
-      {/* Scanline */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.025] rounded-3xl"
         style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,1) 2px, rgba(255,255,255,1) 3px)' }}
       />
 
       <div className="relative z-10 p-6 flex flex-col gap-5">
-        {/* Header */}
         <div>
           <p className="font-poppins text-[10px] uppercase tracking-[0.35em] text-agro-gold/60 mb-1">— Resumo</p>
           <h3 className="font-space font-black text-2xl uppercase tracking-tighter text-agro-blue">do Pedido</h3>
@@ -418,7 +404,6 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
 
         <div className="h-[1px]" style={{ background: 'linear-gradient(to right, rgba(176,142,104,0.3), transparent)' }} />
 
-        {/* Line items */}
         <div className="flex flex-col gap-3">
           {items.map(item => (
             <motion.div key={`${item.id}-${item.color}-${item.size}`}
@@ -443,7 +428,6 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
 
         <div className="h-[1px]" style={{ background: 'rgba(176,142,104,0.12)' }} />
 
-        {/* Totals */}
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <span className="font-poppins text-xs uppercase tracking-wider text-agro-blue/40">Subtotal ({itemCount} {itemCount === 1 ? 'item' : 'itens'})</span>
@@ -457,7 +441,6 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
 
         <div className="h-[1px]" style={{ background: 'rgba(176,142,104,0.18)' }} />
 
-        {/* Total */}
         <div className="flex justify-between items-end">
           <span className="font-space font-bold text-sm uppercase tracking-widest text-agro-blue/50">Total</span>
           <div className="text-right">
@@ -472,7 +455,7 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
           </div>
         </div>
 
-        {/* Cheers CTA */}
+        {/* Cheers CTA - Modificado para chamar a função interna onCheckout */}
         <motion.button
           onClick={onCheckout}
           disabled={items.length === 0}
@@ -489,7 +472,6 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
           } : {}}
           transition={{ boxShadow: { duration: 2.5, repeat: Infinity } }}
         >
-          {/* Shine sweep */}
           {items.length > 0 && (
             <motion.div
               className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -502,14 +484,13 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
             />
           )}
           <span className="relative z-10 flex items-center justify-center gap-2">
-            Finalizar no Cheers
+            Finalizar Compra
             {items.length > 0 && (
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>→</motion.span>
             )}
           </span>
         </motion.button>
 
-        {/* Trust badges */}
         <div className="flex items-center justify-center gap-4">
           {['🔒 Seguro', '⚡ Rápido', '✓ Exclusivo'].map(t => (
             <span key={t} className="font-poppins text-[9px] uppercase tracking-wider text-agro-blue/25">{t}</span>
@@ -557,7 +538,6 @@ function ClearModal({ onConfirm, onCancel }: { onConfirm: ()=>void; onCancel: ()
       className="fixed inset-0 z-[9998] flex items-center justify-center p-6"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
-      {/* Backdrop */}
       <motion.div className="absolute inset-0"
         style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}
         onClick={onCancel}
@@ -611,45 +591,26 @@ export default function CarrinhoPage() {
   const isDark   = useIsDark();
   const [exiting, setExiting]   = useState(false);
   const [showClear, setShowClear] = useState(false);
+  const router = useRouter(); // 🚀 2. DECLARAÇÃO DO ROUTER
 
-  // Build Cheers payload and redirect
+  // 🚀 3. NOVA FUNÇÃO DE CHECKOUT LIMPA
   const handleCheckout = useCallback(() => {
     if (items.length === 0) return;
 
-    // Build query string with cart data for Cheers
-    const payload = {
-      store:    'agrotoxica-2026',
-      items:    items.map(i => ({
-        id:    i.id,
-        nome:  i.nome,
-        price: i.priceNum,
-        qty:   i.qty,
-        color: i.color,
-        size:  i.size,
-        image: i.image,
-      })),
-      total,
-      currency: 'BRL',
-    };
-
-    const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
-
-    setExiting(true);
+    setExiting(true); // Dispara a animação visual da "persiana"
+    
     setTimeout(() => {
-      window.open(`${CHEERS_URL}?cart=${encoded}`, '_blank');
+      router.push('/finalizar'); // Direciona para a nova página na mesma aba
       setExiting(false);
-    }, 700);
-  }, [items, total]);
+    }, 700); // 700ms de espera para a animação terminar
+  }, [items, router]);
 
   return (
     <div className="min-h-screen bg-agro-bg transition-colors duration-500 overflow-hidden relative pb-32">
       <CursorBlob />
 
-      {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <Grid isDark={isDark} />
-
-        {/* Scanlines */}
         <motion.div className="absolute inset-0"
           style={{
             backgroundImage: isDark
@@ -659,8 +620,6 @@ export default function CarrinhoPage() {
           animate={{ backgroundPositionY: ['0px','4px'] }}
           transition={{ duration: .14, repeat: Infinity, ease: 'linear' }}
         />
-
-        {/* Typographic backdrop */}
         <motion.div
           className="absolute top-4 left-[-3%] leading-none select-none pointer-events-none"
           initial={{ opacity: 0, x: -60 }}
@@ -671,8 +630,6 @@ export default function CarrinhoPage() {
             CART
           </span>
         </motion.div>
-
-        {/* Orbit rings */}
         {[300, 550, 800].map((size, i) => (
           <motion.div key={i}
             className="absolute rounded-full pointer-events-none"
@@ -691,17 +648,13 @@ export default function CarrinhoPage() {
             }}
           />
         ))}
-
-        {/* Marquees */}
-<div className="absolute top-[7%] w-full flex flex-col gap-4">
+        <div className="absolute top-[7%] w-full flex flex-col gap-4">
           <Marquee isDark={isDark} text="AGROTÓXICA  ·  LOTE NO CARRINHO  ·  SAFRA 26  ·  TRAIA DE RESPEITO  ·  FECHAR O NEGÓCIO" dir={1} speed={60} op={.055} />
           <Marquee isDark={isDark} text="RAIZ GROSSA  ·  SISTEMA BRUTO  ·  MOAGEM  ·  LOTE RESTRITO  ·  O VENENO DA ROÇA" dir={-1} speed={45} op={.035} />
         </div>
         <div className="absolute bottom-[6%] w-full flex flex-col gap-4">
           <Marquee isDark={isDark} text="PAGAR O BOLETO  ·  TCHAU BRIGADO  ·  AGROTÓXICA  ·  2026  ·  AGUENTA O TRANCO" dir={-1} speed={52} op={.05} />
         </div>
-
-        {/* Noise grain */}
         <div className="absolute inset-0 mix-blend-overlay"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E")`,
@@ -710,10 +663,7 @@ export default function CarrinhoPage() {
         />
       </div>
 
-      {/* ── CONTENT ── */}
       <div className="container mx-auto px-6 md:px-12 pt-20 relative z-10">
-
-        {/* Header */}
         <header className="mb-12">
           <motion.div className="flex items-center gap-3 mb-4"
             initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
@@ -733,7 +683,6 @@ export default function CarrinhoPage() {
             </h1>
 
             <div className="flex items-center gap-4">
-              {/* Item count */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={count}
@@ -754,7 +703,6 @@ export default function CarrinhoPage() {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Clear button */}
               {items.length > 0 && (
                 <motion.button
                   onClick={() => setShowClear(true)}
@@ -772,7 +720,6 @@ export default function CarrinhoPage() {
             </div>
           </div>
 
-          {/* Underline */}
           <motion.div
             className="h-[2px] mt-4 rounded-full"
             style={{ background: 'linear-gradient(to right, rgba(176,142,104,0.5), rgba(0,91,236,0.2), transparent)', width: '40%' }}
@@ -782,10 +729,7 @@ export default function CarrinhoPage() {
           />
         </header>
 
-        {/* ── MAIN LAYOUT ── */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-
-          {/* Items list */}
           <div>
             <AnimatePresence mode="popLayout">
               {items.length === 0
@@ -802,7 +746,6 @@ export default function CarrinhoPage() {
                       />
                     ))}
 
-                    {/* Continue shopping */}
                     <motion.div
                       layout
                       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -826,7 +769,6 @@ export default function CarrinhoPage() {
             </AnimatePresence>
           </div>
 
-          {/* Summary */}
           <div>
             <AnimatePresence>
               {items.length > 0 && (
@@ -842,10 +784,8 @@ export default function CarrinhoPage() {
         </div>
       </div>
 
-      {/* Checkout venetian transition */}
       <CheckoutTransition active={exiting} />
 
-      {/* Clear modal */}
       <AnimatePresence>
         {showClear && (
           <ClearModal

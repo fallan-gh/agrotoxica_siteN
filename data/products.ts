@@ -1,5 +1,6 @@
 export const products = [
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'camiseta-algodao', 
     nome: 'Camiseta Algodão', 
     type: 'Algodão', 
@@ -9,6 +10,8 @@ export const products = [
     model3d: {
       'Preto': '/assets/3d/models/1-preto.glb',
       'Branco': '/assets/3d/models/1-branco.glb'
+    
+
     },
     cores: ['Preto', 'Branco'], 
     tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
@@ -32,6 +35,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'camiseta-drifit', 
     nome: 'Camiseta Dry-Fit', 
     type: 'Dri-fit', 
@@ -73,6 +77,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'cropped-top', 
     nome: 'Cropped Top', 
     type: 'Top', 
@@ -114,6 +119,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'body', 
     nome: 'Body', 
     type: 'Body', 
@@ -155,6 +161,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'jaqueta-college', 
     nome: 'Jaqueta College', 
     type: 'College', 
@@ -178,6 +185,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'moletom-careca', 
     nome: 'Moletom Careca', 
     type: 'Careca', 
@@ -219,6 +227,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'calca-tactel', 
     nome: 'Calça Tactel', 
     type: 'Tactel', 
@@ -260,6 +269,7 @@ export const products = [
     }
   },
   { 
+    linkCheers: 'https://cheers.com.br/produto/100672',
     id: 'caneca-tirante', 
     nome: 'Caneca & Tirante', 
     type: 'Acessório', 
