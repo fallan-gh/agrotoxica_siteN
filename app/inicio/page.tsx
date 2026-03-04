@@ -2,12 +2,14 @@
 import {
   useState, useEffect, useRef, Suspense,
 } from 'react';
+import React from 'react';
 import {
   motion, AnimatePresence,
   useMotionValue, useSpring, useTransform,
   useInView,
 } from 'framer-motion';
 import Link from 'next/link';
+import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
 import { products } from '../../data/products';
 import Hotbar from '../../components/Hotbar';
@@ -21,6 +23,13 @@ const E        = [0.22, 1, 0.36, 1]    as const;
 const EB       = [0.34, 1.56, 0.64, 1] as const;
 const ES       = [0.16, 1, 0.30, 1]    as const;
 const FEATURED = products[0];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MODEL VIEWER — React.createElement bypassa checagem de JSX.IntrinsicElements
+// ─────────────────────────────────────────────────────────────────────────────
+function ModelViewer(props: Record<string, unknown>) {
+  return React.createElement('model-viewer', props);
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DARK MODE HOOK — reacts to .dark class toggled by Hotbar
@@ -133,7 +142,7 @@ function Particles({ isDark }: { isDark: boolean }) {
       x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight,
       vx:(Math.random()-.5)*.3, vy:-(Math.random()*.5+.1),
       r:Math.random()*2+.4,
-      a:Math.random()*(isDark?.28:.12)+.04,
+      a:Math.random()*(isDark ? .28 : .12)+.04,
       c:COLORS[Math.floor(Math.random()*COLORS.length)],
     }));
 
@@ -292,7 +301,7 @@ function ScanSweep() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PRODUCT HERO — AGORA COM MODELO 3D DINÂMICO
+// PRODUCT HERO — MODELO 3D DINÂMICO
 // ─────────────────────────────────────────────────────────────────────────────
 function ProductHero({ mx, my, isDark }:{ mx:any; my:any; isDark:boolean }) {
   const px = useTransform(mx, (v:number) => v*.035);
@@ -300,71 +309,75 @@ function ProductHero({ mx, my, isDark }:{ mx:any; my:any; isDark:boolean }) {
   const shadowFilter = useTransform(
     [mx, my] as any,
     ([vx,vy]:number[]) =>
-      `drop-shadow(${-vx*.03}px ${-vy*.03}px 60px rgba(176,142,104,${isDark?.45:.25})) drop-shadow(0px 40px 80px rgba(0,0,0,${isDark?.6:.12}))`
+      `drop-shadow(${-vx*.03}px ${-vy*.03}px 60px rgba(176,142,104,${isDark ? .45 : .25})) drop-shadow(0px 40px 80px rgba(0,0,0,${isDark ? .6 : .12}))`
   );
 
-  // Lógica de Rotação de Produtos a cada 10s
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // Importa o model-viewer apenas no client-side
-    import('@google/model-viewer');
-
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % products.length);
-    }, 10000); // 10 segundos
-
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
   const currentProduct = products[currentIndex];
-  
-  // Extrai o primeiro modelo 3D disponível para a peça atual
+
   const getFirstModel = (model3d: any) => {
     if (typeof model3d === 'string') return model3d;
-    // Se for objeto, pega o primeiro valor (ex: o modelo 'Preto' ou 'Azul/Branco')
     return Object.values(model3d)[0] as string;
   };
 
   const modelSrc = getFirstModel(currentProduct.model3d);
 
   return (
-    <motion.div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-      style={{ x:px, y:py }}
-    >
-      <motion.div className="absolute w-80 h-80 rounded-full pointer-events-none"
-        style={{
-          background: isDark
-            ? 'radial-gradient(circle, rgba(176,142,104,0.22) 0%, rgba(0,91,236,0.1) 50%, transparent 72%)'
-            : 'radial-gradient(circle, rgba(176,142,104,0.15) 0%, rgba(0,91,236,0.06) 50%, transparent 72%)',
-          filter:'blur(50px)',
-        }}
-        animate={{ scale:[1,1.15,1], opacity:[.7,1,.7] }}
-        transition={{ duration:3.5, repeat:Infinity, ease:'easeInOut' }}
+    <>
+      {/* Carrega o model-viewer via CDN — sem npm, sem erro de tipo */}
+      <Script
+        type="module"
+        src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
       />
-      
-      {/* Container do Model Viewer */}
-      <motion.div
-        key={currentProduct.id} // Força a reanimação ao trocar o produto
-        initial={{ scale:.5, opacity:0, filter:'blur(30px)' }}
-        animate={{ scale:1, opacity:1, filter:'blur(0px)' }}
-        exit={{ scale:.5, opacity:0, filter:'blur(30px)' }}
-        transition={{ duration:1.4, ease:EB }}
-        style={{ filter:shadowFilter, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+
+      <motion.div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+        style={{ x:px, y:py }}
       >
-        <model-viewer
-          src={modelSrc}
-          alt={`Modelo 3D de ${currentProduct.nome}`}
-          auto-rotate
-          rotation-per-second="30deg" // Gira suavemente
-          camera-controls={false} // Desativado para evitar interferência na home
-          exposure="0.6"
-          shadow-intensity="0" // Sombra removida para não conflitar com o seu shadowFilter
-          environment-image="neutral"
-          style={{ width: '480px', height: '480px', pointerEvents: 'none' }} // Tamanho igual ao da imagem antiga
+        <motion.div className="absolute w-80 h-80 rounded-full pointer-events-none"
+          style={{
+            background: isDark
+              ? 'radial-gradient(circle, rgba(176,142,104,0.22) 0%, rgba(0,91,236,0.1) 50%, transparent 72%)'
+              : 'radial-gradient(circle, rgba(176,142,104,0.15) 0%, rgba(0,91,236,0.06) 50%, transparent 72%)',
+            filter:'blur(50px)',
+          }}
+          animate={{ scale:[1,1.15,1], opacity:[.7,1,.7] }}
+          transition={{ duration:3.5, repeat:Infinity, ease:'easeInOut' }}
         />
+
+        <motion.div
+          key={currentProduct.id}
+          initial={{ scale:.5, opacity:0, filter:'blur(30px)' }}
+          animate={{ scale:1, opacity:1, filter:'blur(0px)' }}
+          exit={{ scale:.5, opacity:0, filter:'blur(30px)' }}
+          transition={{ duration:1.4, ease:EB }}
+          style={{ filter:shadowFilter, width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
+          {/*
+            ✅ ModelViewer usa React.createElement('model-viewer', props) internamente.
+            NUNCA usar <model-viewer> direto no JSX — sempre <ModelViewer>.
+          */}
+          <ModelViewer
+            src={modelSrc}
+            alt={`Modelo 3D de ${currentProduct.nome}`}
+            auto-rotate=""
+            rotation-per-second="30deg"
+            camera-controls="false"
+            exposure="0.6"
+            shadow-intensity="0"
+            environment-image="neutral"
+            style={{ width: '480px', height: '480px', pointerEvents: 'none' }}
+          />
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </>
   );
 }
 
@@ -580,18 +593,16 @@ function HeroSection({ isDark }:{ isDark:boolean }) {
   );
 }
 
-// ... [O resto do código permanece intocado]
-
 // ─────────────────────────────────────────────────────────────────────────────
 // MANIFESTO
 // ─────────────────────────────────────────────────────────────────────────────
 const WORDS = [
   { w:'Lida.',        gold:false },
   { w:'Poeira.',      gold:false },
-  { w:'Veneno.',      gold:true  }, // Gold na essência da marca
+  { w:'Veneno.',      gold:true  },
   { w:'Raiz.',        gold:false },
   { w:'Sistemático.', gold:false },
-  { w:'Agrotóxica.',  gold:true  }, // Gold no nome da casa
+  { w:'Agrotóxica.',  gold:true  },
 ];
 
 function ManifestoWord({ word, gold, index }:{ word:string; gold:boolean; index:number }) {
@@ -811,7 +822,7 @@ function StatsBar({ isDark }:{ isDark:boolean }) {
         </div>
       </div>
       <div className="mt-14">
-          <Marquee isDark={isDark} text="AGROTÓXICA  ·  MOAGEM  ·  TRAIADO  ·  MODÃO  ·  CHIQUE NO ÚRTIMO  ·  TCHAU BRIGADO  ·  ESTILO CAIPIRA" dir={1} speed={50} op={.1} />
+        <Marquee isDark={isDark} text="AGROTÓXICA  ·  MOAGEM  ·  TRAIADO  ·  MODÃO  ·  CHIQUE NO ÚRTIMO  ·  TCHAU BRIGADO  ·  ESTILO CAIPIRA" dir={1} speed={50} op={.1} />
       </div>
     </section>
   );
