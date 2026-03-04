@@ -49,7 +49,7 @@ export default function SecretVaultPage() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // 🔒 A SENHA ULTRA SECRETA FICA AQUI (Mude para o que quiser)
-  const SENHA_MESTRA = 'SISTEMABRUTO';
+  const SENHA_MESTRA = 'JNMS982MXZS98S';
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
