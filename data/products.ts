@@ -1,20 +1,18 @@
 export const products = [
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100760',
     id: 'camiseta-algodao', 
     nome: 'Camiseta Algodão', 
     type: 'Algodão', 
-    price: 'R$ 100,00', 
+    price: 'R$ 65,00', 
     descricao: 'A peça fundamental do Território. Modelagem streetwear superdimensionada, desenvolvida em algodão premium pesado (heavyweight) para um caimento estruturado, conforto extremo e durabilidade implacável.',
     image: '/assets/images/thumbs/algodao.webp', 
     model3d: {
       'Preto': '/assets/3d/models/1-preto.glb',
       'Branco': '/assets/3d/models/1-branco.glb'
-    
-
     },
     cores: ['Preto', 'Branco'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/algodao-preto- (1).webp',
@@ -35,11 +33,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100763',
     id: 'camiseta-drifit', 
     nome: 'Camiseta Dry-Fit', 
     type: 'Dri-fit', 
-    price: 'R$ 199,00', 
+    price: 'R$ 68,00', 
     descricao: 'Engenharia de alta performance. Tecido tecnológico de secagem ultra-rápida e respirabilidade máxima. Feita para aguentar o tranco sem perder a estética agressiva da marca.',
     image: '/assets/images/thumbs/drifit.webp', 
     model3d: {
@@ -48,7 +46,7 @@ export const products = [
       'Azul': '/assets/3d/models/2-azul.glb'
     },
     cores: ['Preto', 'Branco', 'Azul'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/drifit-preto- (1).webp',
@@ -77,11 +75,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100765',
     id: 'cropped-top', 
     nome: 'Cropped Top', 
     type: 'Top', 
-    price: 'R$ 00,00', 
+    price: 'R$ 82,00', 
     descricao: 'Corte ousado e ajuste perfeito. O Cropped Top traz a identidade da Agrotóxica com uma modelagem que valoriza a silhueta, garantindo liberdade de movimento e atitude.',
     image: '/assets/images/thumbs/cropped.webp', 
     model3d: {
@@ -90,7 +88,7 @@ export const products = [
       'Azul': '/assets/3d/models/3-azul.glb'
     },
     cores: ['Preto', 'Branco', 'Azul'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/cropped-preto- (1).webp',
@@ -119,11 +117,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100770',
     id: 'body', 
     nome: 'Body', 
     type: 'Body', 
-    price: 'R$ 00,00', 
+    price: 'R$ 82,00', 
     descricao: 'A fusão entre o tático e o fashion. Uma peça inteiriça com elasticidade premium, desenhada para se moldar ao corpo e servir como base para qualquer composição.',
     image: '/assets/images/thumbs/body.webp', 
     model3d: {
@@ -132,7 +130,7 @@ export const products = [
       'Azul': '/assets/3d/models/4-azul.glb'
     },
     cores: ['Preto', 'Branco', 'Azul'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/body-preto- (1).webp',
@@ -161,18 +159,18 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100772',
     id: 'jaqueta-college', 
     nome: 'Jaqueta College', 
     type: 'College', 
-    price: 'R$ 00,00', 
+    price: 'R$ 210,00', 
     descricao: 'A coroa da coleção. Jaqueta College clássica reimaginada com bordados de alta densidade, botões de pressão reforçados e a assinatura inconfundível do nosso estilo.',
     image: '/assets/images/thumbs/college.webp', 
     model3d: {
       'Azul/Branco': '/assets/3d/models/5.glb'
     },
     cores: ['Azul/Branco'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Azul/Branco': [
         '/assets/images/renders/college- (1).webp', 
@@ -185,11 +183,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/produto/100771',
     id: 'moletom-careca', 
     nome: 'Moletom Careca', 
     type: 'Careca', 
-    price: 'R$ 00,00', 
+    price: 'R$ 158,00', 
     descricao: 'Essencial para os dias frios. Moletom felpado de alta gramatura com gola careca, punhos canelados firmes e um caimento boxy que domina a estética das ruas.',
     image: '/assets/images/thumbs/moletom.webp', 
     model3d: {
@@ -198,7 +196,7 @@ export const products = [
       'Azul': '/assets/3d/models/6-azul.glb'
     },
     cores: ['Preto', 'Branco', 'Azul'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/moletom-preto- (1).webp',
@@ -227,11 +225,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/shop/6',
     id: 'calca-tactel', 
     nome: 'Calça Tactel', 
     type: 'Tactel', 
-    price: 'R$ 00,00', 
+    price: 'R$ 92,00', 
     descricao: 'Inspirada no visual utilitário. Calça em tactel leve e resistente, com elástico ajustável, bolsos estratégicos e um corte que proporciona agilidade máxima.',
     image: '/assets/images/thumbs/tactel.webp', 
     model3d: {
@@ -240,7 +238,7 @@ export const products = [
       'Azul': '/assets/3d/models/7-azul.glb'
     },
     cores: ['Preto', 'Branco', 'Azul'], 
-    tamanhos: ['PPP', 'PP', 'P', 'M', 'G', 'GG', 'G1', 'G2'],
+    tamanhos: ['PP', 'P', 'M', 'G', 'GG'],
     galeria: {
       'Preto': [
         '/assets/images/renders/tactel-preto- (1).webp',
@@ -269,11 +267,11 @@ export const products = [
     }
   },
   { 
-    linkCheers: 'https://cheers.com.br/produto/100672',
+    linkCheers: 'https://cheers.com.br/kit/22295',
     id: 'caneca-tirante', 
     nome: 'Caneca & Tirante', 
     type: 'Acessório', 
-    price: 'R$ 00,00', 
+    price: 'R$ 50,00', 
     descricao: 'O kit oficial de sobrevivência. Caneca de alumínio premium com tirante personalizado. Indispensável para quem vive intensamente a nossa cultura.',
     image: '/assets/images/thumbs/caneca.webp', 
     model3d: {

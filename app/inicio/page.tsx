@@ -303,7 +303,7 @@ function ScanSweep() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PRODUCT HERO — MODELO 3D DINÂMICO
 // ─────────────────────────────────────────────────────────────────────────────
-function ProductHero({ mx, my, isDark }:{ mx:any; my:any; isDark:boolean }) {
+function ProductHero({ mx, my, isDark, currentProduct }:{ mx:any; my:any; isDark:boolean; currentProduct: typeof products[0] }) {
   const px = useTransform(mx, (v:number) => v*.035);
   const py = useTransform(my, (v:number) => v*.035);
   const shadowFilter = useTransform(
@@ -311,17 +311,6 @@ function ProductHero({ mx, my, isDark }:{ mx:any; my:any; isDark:boolean }) {
     ([vx,vy]:number[]) =>
       `drop-shadow(${-vx*.03}px ${-vy*.03}px 60px rgba(176,142,104,${isDark ? .45 : .25})) drop-shadow(0px 40px 80px rgba(0,0,0,${isDark ? .6 : .12}))`
   );
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % products.length);
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentProduct = products[currentIndex];
 
   const getFirstModel = (model3d: any) => {
     if (typeof model3d === 'string') return model3d;
@@ -390,6 +379,16 @@ function HeroSection({ isDark }:{ isDark:boolean }) {
   const bgY  = useTransform(my, (v:number) => v*.008);
   const txtX = useTransform(mx, (v:number) => v*-.012);
 
+  // ── produto rotativo — estado aqui para sincronizar painel direito
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % products.length);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+  const currentProduct = products[currentIndex];
+
   return (
     <section className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-agro-bg transition-colors duration-500">
       <Particles isDark={isDark} />
@@ -432,7 +431,7 @@ function HeroSection({ isDark }:{ isDark:boolean }) {
 
       {/* Product */}
       <div className="absolute inset-0 z-[5]">
-        <ProductHero mx={mx} my={my} isDark={isDark} />
+        <ProductHero mx={mx} my={my} isDark={isDark} currentProduct={currentProduct} />
       </div>
 
       {/* Marquees */}
@@ -556,8 +555,22 @@ function HeroSection({ isDark }:{ isDark:boolean }) {
           style={{ x:txtX }}
         >
           <div className="w-[1px] h-20" style={{ background:'linear-gradient(to bottom, transparent, rgba(176,142,104,0.5), transparent)' }} />
-          <p className="font-space font-black text-xs uppercase tracking-[0.4em] text-agro-blue/30 [writing-mode:vertical-rl] rotate-180">{FEATURED.nome}</p>
-          <p className="font-poppins text-[9px] uppercase tracking-[0.3em] text-agro-gold/60 [writing-mode:vertical-rl] rotate-180">{(FEATURED as any).price}</p>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={currentProduct.id + '-nome'}
+              className="font-space font-black text-xs uppercase tracking-[0.4em] text-agro-blue/30 [writing-mode:vertical-rl] rotate-180"
+              initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+              transition={{ duration:.5 }}
+            >{currentProduct.nome}</motion.p>
+          </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={currentProduct.id + '-price'}
+              className="font-poppins text-[9px] uppercase tracking-[0.3em] text-agro-gold/60 [writing-mode:vertical-rl] rotate-180"
+              initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+              transition={{ duration:.5 }}
+            >{(currentProduct as any).price}</motion.p>
+          </AnimatePresence>
           <div className="w-[1px] h-20" style={{ background:'linear-gradient(to bottom, transparent, rgba(176,142,104,0.5), transparent)' }} />
         </motion.div>
 

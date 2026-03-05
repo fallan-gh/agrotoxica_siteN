@@ -1,5 +1,5 @@
 import './globals.css';
-import ConditionalHotbar from '../components/ConditionalHotbar'; // 🚀 Puxando o componente novo
+import Hotbar from '../components/Hotbar';
 
 export const metadata = {
   title: 'Associação Atlética Agrotóxica',
@@ -15,8 +15,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="font-poppins antialiased">
         {children}
-        {/* 🚀 O interruptor cuida de aparecer ou não */}
-        <ConditionalHotbar />
+        <Hotbar />
       </body>
     </html>
   );
