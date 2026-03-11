@@ -5,108 +5,34 @@ import {
   useMotionValue, useSpring, useTransform,
 } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // 🚀 1. IMPORT DO ROUTER DO NEXT.JS
 import { useCart, type CartItem } from '@/lib/cart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────────────────────
-const E   = [0.22, 1, 0.36, 1]    as const;
-const EB  = [0.34, 1.56, 0.64, 1] as const;
-const ES  = [0.16, 1, 0.30, 1]    as const;
+const E = [0.22, 1, 0.36, 1] as const;
+const EB = [0.34, 1.56, 0.64, 1] as const;
+const ES = [0.16, 1, 0.30, 1] as const;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DARK MODE HOOK
-// ─────────────────────────────────────────────────────────────────────────────
-function useIsDark() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    const check = () => setIsDark(document.documentElement.classList.contains('dark'));
-    check();
-    const obs = new MutationObserver(check);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => obs.disconnect();
-  }, []);
-  return isDark;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CURSOR BLOB
-// ─────────────────────────────────────────────────────────────────────────────
-function CursorBlob() {
-  const x  = useMotionValue(0);
-  const y  = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 45, damping: 20 });
-  const sy = useSpring(y, { stiffness: 45, damping: 20 });
-  useEffect(() => {
-    const fn = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); };
-    window.addEventListener('mousemove', fn);
-    return () => window.removeEventListener('mousemove', fn);
-  }, [x, y]);
-  return (
-    <motion.div className="fixed pointer-events-none z-0"
-      style={{
-        x: sx, y: sy, translateX: '-50%', translateY: '-50%',
-        width: 700, height: 700, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(176,142,104,0.07) 0%, rgba(0,91,236,0.04) 45%, transparent 70%)',
-        filter: 'blur(50px)',
-      }}
-    />
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MARQUEE
-// ─────────────────────────────────────────────────────────────────────────────
-function Marquee({ text, dir=1, speed=55, op=0.06, isDark }:{
-  text:string; dir?:number; speed?:number; op?:number; isDark:boolean;
-}) {
-  const rep = Array(12).fill(text).join('  ·  ');
-  return (
-    <div className="overflow-hidden w-full">
-      <motion.p className="font-space font-bold uppercase whitespace-nowrap text-xs tracking-[0.22em]"
-        style={{ opacity: op, color: isDark ? '#fff' : '#000' }}
-        animate={{ x: dir > 0 ? ['0%','-50%'] : ['-50%','0%'] }}
-        transition={{ duration: speed, repeat: Infinity, ease: 'linear' }}
-      >{rep}</motion.p>
-    </div>
-  );
-}
+import { useIsDark } from '@/lib/perf';
+import { CursorBlob, Marquee, Grid } from '@/components/effects/SharedEffects';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SPLIT TITLE
 // ─────────────────────────────────────────────────────────────────────────────
-function SplitIn({ text, className='', delay=0 }:{ text:string; className?:string; delay?:number }) {
+function SplitIn({ text, className = '', delay = 0 }: { text: string; className?: string; delay?: number }) {
   return (
     <span className={`inline-flex overflow-hidden ${className}`}>
       {text.split('').map((c, i) => (
         <motion.span key={i} className="inline-block"
-          initial={{ y: '110%', opacity: 0, rotateX: -80 }}
-          animate={{ y: '0%', opacity: 1, rotateX: 0 }}
+          initial={{ y: '110%', opacity: 0 }}
+          animate={{ y: '0%', opacity: 1 }}
           transition={{ duration: 0.65, delay: delay + i * 0.04, ease: ES }}
         >{c === ' ' ? '\u00A0' : c}</motion.span>
       ))}
     </span>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ANIMATED GRID (subtle)
-// ─────────────────────────────────────────────────────────────────────────────
-function Grid({ isDark }: { isDark: boolean }) {
-  const color = isDark ? 'rgba(255,255,255,0.035)' : 'rgba(0,91,236,0.04)';
-  return (
-    <div className="absolute inset-0 pointer-events-none"
-      style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gridTemplateRows: 'repeat(8,1fr)' }}
-    >
-      {Array.from({ length: 96 }).map((_, i) => (
-        <motion.div key={i} style={{ border: `0.5px solid ${color}` }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 0.5, 0, 0.3, 0] }}
-          transition={{ duration: 6+(i%5), delay: (i*.05)%4, repeat: Infinity }}
-        />
-      ))}
-    </div>
   );
 }
 
@@ -120,7 +46,7 @@ function fmtBRL(value: number) {
 // ─────────────────────────────────────────────────────────────────────────────
 // QUANTITY CONTROL
 // ─────────────────────────────────────────────────────────────────────────────
-function QtyControl({ qty, onInc, onDec }: { qty: number; onInc: ()=>void; onDec: ()=>void }) {
+function QtyControl({ qty, onInc, onDec }: { qty: number; onInc: () => void; onDec: () => void }) {
   return (
     <div className="flex items-center gap-0 rounded-xl overflow-hidden"
       style={{ border: '1px solid rgba(176,142,104,0.25)' }}
@@ -173,11 +99,9 @@ function CartRow({ item, index, onRemove, onQty }: {
       }
       exit={{ opacity: 0, x: 60, scale: 0.9, height: 0, marginBottom: 0 }}
       transition={{ duration: 0.45, delay: removing ? 0 : index * 0.07, ease: E }}
-      className="group relative rounded-3xl overflow-hidden transition-all duration-300"
+      className="group relative rounded-3xl overflow-hidden transition-all duration-300 pointer-events-auto"
       style={{
-        background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
-        backdropFilter: 'blur(20px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+        background: isDark ? 'var(--color-card)' : 'var(--color-card)',
         border: '1px solid rgba(176,142,104,0.12)',
         boxShadow: isDark
           ? '0 4px 24px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.03) inset'
@@ -219,7 +143,8 @@ function CartRow({ item, index, onRemove, onQty }: {
             className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-400"
             style={{ background: 'radial-gradient(circle, rgba(176,142,104,0.15) 0%, transparent 70%)' }}
           />
-          <img src={item.image} alt={item.nome}
+          <Image src={item.image} alt={item.nome}
+            width={96} height={96}
             className="w-full h-full object-contain p-2"
           />
           {item.qty > 1 && (
@@ -257,8 +182,8 @@ function CartRow({ item, index, onRemove, onQty }: {
               whileTap={{ scale: 0.85 }}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                <path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
               </svg>
             </motion.button>
           </div>
@@ -314,8 +239,8 @@ function EmptyCart() {
             strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"
             className="text-agro-blue/25"
           >
-            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
           </svg>
         </motion.div>
         {[1, 1.4, 1.8].map((scale, i) => (
@@ -369,8 +294,8 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
   isDark: boolean;
   onCheckout: () => void;
 }) {
-  const subtotal  = total;
-  const shipping  = total > 0 ? 0 : 0; 
+  const subtotal = total;
+  const shipping = total > 0 ? 0 : 0;
   const itemCount = items.reduce((acc, i) => acc + i.qty, 0);
 
   return (
@@ -380,9 +305,7 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
       animate={{ opacity: 1, x: 0, scale: 1 }}
       transition={{ duration: 0.7, delay: 0.3, ease: E }}
       style={{
-        background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
-        backdropFilter: 'blur(24px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        background: isDark ? 'var(--color-card)' : 'var(--color-card)',
         border: '1px solid rgba(176,142,104,0.18)',
         boxShadow: isDark
           ? '0 8px 40px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.03) inset'
@@ -414,7 +337,7 @@ function OrderSummary({ items, total, isDark, onCheckout }: {
                 <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0"
                   style={{ background: 'rgba(176,142,104,0.08)', border: '1px solid rgba(176,142,104,0.15)' }}
                 >
-                  <img src={item.image} alt={item.nome} className="w-full h-full object-contain p-1" />
+                  <Image src={item.image} alt={item.nome} width={32} height={32} className="w-full h-full object-contain p-1" />
                 </div>
                 <div className="min-w-0">
                   <p className="font-space font-bold text-xs uppercase tracking-tight text-agro-blue truncate leading-none">{item.nome}</p>
@@ -532,7 +455,7 @@ function CheckoutTransition({ active }: { active: boolean }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // CLEAR CONFIRM MODAL
 // ─────────────────────────────────────────────────────────────────────────────
-function ClearModal({ onConfirm, onCancel }: { onConfirm: ()=>void; onCancel: ()=>void }) {
+function ClearModal({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[9998] flex items-center justify-center p-6"
@@ -560,8 +483,8 @@ function ClearModal({ onConfirm, onCancel }: { onConfirm: ()=>void; onCancel: ()
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             strokeWidth="1.5" strokeLinecap="round" className="text-red-400"
           >
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
           </svg>
         </div>
         <div className="text-center">
@@ -588,8 +511,8 @@ function ClearModal({ onConfirm, onCancel }: { onConfirm: ()=>void; onCancel: ()
 // ─────────────────────────────────────────────────────────────────────────────
 export default function CarrinhoPage() {
   const { items, total, count, removeItem, updateQty, clearCart } = useCart();
-  const isDark   = useIsDark();
-  const [exiting, setExiting]   = useState(false);
+  const isDark = useIsDark();
+  const [exiting, setExiting] = useState(false);
   const [showClear, setShowClear] = useState(false);
   const router = useRouter(); // 🚀 2. DECLARAÇÃO DO ROUTER
 
@@ -598,7 +521,7 @@ export default function CarrinhoPage() {
     if (items.length === 0) return;
 
     setExiting(true); // Dispara a animação visual da "persiana"
-    
+
     setTimeout(() => {
       router.push('/finalizar'); // Direciona para a nova página na mesma aba
       setExiting(false);
@@ -617,7 +540,7 @@ export default function CarrinhoPage() {
               ? 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.007) 2px,rgba(255,255,255,0.007) 4px)'
               : 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.01) 2px,rgba(0,0,0,0.01) 4px)',
           }}
-          animate={{ backgroundPositionY: ['0px','4px'] }}
+          animate={{ backgroundPositionY: ['0px', '4px'] }}
           transition={{ duration: .14, repeat: Infinity, ease: 'linear' }}
         />
         <motion.div
@@ -636,15 +559,15 @@ export default function CarrinhoPage() {
             style={{
               width: size, height: size,
               top: '45%', left: '65%',
-              marginTop: -size/2, marginLeft: -size/2,
-              border: i%2===0
+              marginTop: -size / 2, marginLeft: -size / 2,
+              border: i % 2 === 0
                 ? `1px solid rgba(0,91,236,0.05)`
                 : `1px dashed rgba(176,142,104,0.08)`,
             }}
             animate={{ rotate: [0, 360], scale: [.97, 1.03, .97] }}
             transition={{
-              rotate: { duration: 20+i*12, repeat: Infinity, ease: 'linear' },
-              scale:  { duration: 8+i*2,   repeat: Infinity, ease: 'easeInOut' },
+              rotate: { duration: 20 + i * 12, repeat: Infinity, ease: 'linear' },
+              scale: { duration: 8 + i * 2, repeat: Infinity, ease: 'easeInOut' },
             }}
           />
         ))}
@@ -712,7 +635,7 @@ export default function CarrinhoPage() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
                   </svg>
                   Limpar tudo
                 </motion.button>

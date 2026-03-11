@@ -11,14 +11,14 @@ import Hotbar from '../../components/Hotbar';
 // BRAND
 // ─────────────────────────────────────────────────────────────────────────────
 const B = {
-  blue:  '#005BEC',
-  gold:  '#B08E68',
+  blue: '#005BEC',
+  gold: '#B08E68',
   olive: '#866846',
-  bg:    'var(--color-bg)',
-  text:  'var(--color-text)',
+  bg: 'var(--color-bg)',
+  text: 'var(--color-text)',
 };
 
-const EASE      = [0.22, 1, 0.36, 1] as const;
+const EASE = [0.22, 1, 0.36, 1] as const;
 const EASE_BACK = [0.34, 1.56, 0.64, 1] as const;
 const EASE_SLOW = [0.16, 1, 0.30, 1] as const;
 
@@ -27,18 +27,18 @@ const EASE_SLOW = [0.16, 1, 0.30, 1] as const;
 // ─────────────────────────────────────────────────────────────────────────────
 const DEPARTMENTS = [
   {
-    id:    'lideranca',
+    id: 'lideranca',
     label: 'Liderança',
     color: '#005BEC',
     glyph: '★',
     members: [
-      { name: 'Amanda',          role: 'Presidente'       },
-      { name: 'Gabriel Henrique',role: 'Vice-Presidente'  },
-      { name: 'Verônica',        role: 'Diretoria Geral'  },
+      { name: 'Amanda', role: 'Presidente' },
+      { name: 'Gabriel Henrique', role: 'Vice-Presidente' },
+      { name: 'Verônica', role: 'Diretoria Geral' },
     ],
   },
   {
-    id:    'financeiro',
+    id: 'financeiro',
     label: 'Financeiro',
     color: '#2A7A3B',
     glyph: '◆',
@@ -47,71 +47,71 @@ const DEPARTMENTS = [
     ],
   },
   {
-    id:    'produtos',
+    id: 'produtos',
     label: 'Produtos',
     color: '#B08E68',
     glyph: '▲',
     members: [
-      { name: 'Lincoln',   role: 'Diretor de Produtos' },
-      { name: 'Giovanna',  role: 'Diretora de Produtos' },
+      { name: 'Lincoln', role: 'Diretor de Produtos' },
+      { name: 'Giovanna', role: 'Diretora de Produtos' },
       { name: 'Delaporte', role: 'Diretor de Produtos' },
-      { name: 'Gabriela',  role: 'Diretora de Produtos' },
+      { name: 'Gabriela', role: 'Diretora de Produtos' },
     ],
   },
   {
-    id:    'esportes',
+    id: 'esportes',
     label: 'Esportes',
     color: '#C0392B',
     glyph: '⬟',
     members: [
       { name: 'Ferrarini', role: 'Diretor de Esportes' },
-      { name: 'Henrique',  role: 'Diretor de Esportes' },
-      { name: 'Erike',     role: 'Diretor de Esportes' },
-      { name: 'Andrey',    role: 'Diretor de Esportes' },
+      { name: 'Henrique', role: 'Diretor de Esportes' },
+      { name: 'Erike', role: 'Diretor de Esportes' },
+      { name: 'Andrey', role: 'Diretor de Esportes' },
     ],
   },
   {
-    id:    'marketing',
+    id: 'marketing',
     label: 'Marketing',
     color: '#8E44AD',
     glyph: '●',
     members: [
-      { name: 'Nicoly',  role: 'Diretora de Marketing' },
-      { name: 'Julia',   role: 'Diretora de Marketing' },
+      { name: 'Nicoly', role: 'Diretora de Marketing' },
+      { name: 'Julia', role: 'Diretora de Marketing' },
       { name: 'Isadora', role: 'Diretora de Marketing' },
       { name: 'Rossana', role: 'Diretora de Marketing' },
     ],
   },
   {
-    id:    'eventos',
+    id: 'eventos',
     label: 'Eventos',
     color: '#D35400',
     glyph: '✦',
     members: [
-      { name: 'Jão Pedro',      role: 'Diretor de Evento'  },
-      { name: 'Luiz Eduardo',   role: 'Diretor de Evento'  },
-      { name: 'Emilly',         role: 'Diretora de Evento' },
-      { name: 'Vinicíus Mozart',role: 'Diretor de Evento'  },
-      { name: 'Victor Mendonça',role: 'Diretor de Evento'  },
-      { name: 'Yan',            role: 'Diretor de Evento'  },
-      { name: 'Pedro Paulo',    role: 'Diretor de Evento'  },
-      { name: 'Yasmim de Paula',role: 'Diretora de Evento' },
+      { name: 'Jão Pedro', role: 'Diretor de Evento' },
+      { name: 'Luiz Eduardo', role: 'Diretor de Evento' },
+      { name: 'Emilly', role: 'Diretora de Evento' },
+      { name: 'Vinicíus Mozart', role: 'Diretor de Evento' },
+      { name: 'Victor Mendonça', role: 'Diretor de Evento' },
+      { name: 'Yan', role: 'Diretor de Evento' },
+      { name: 'Pedro Paulo', role: 'Diretor de Evento' },
+      { name: 'Yasmim de Paula', role: 'Diretora de Evento' },
     ],
   },
   {
-    id:    'social',
+    id: 'social',
     label: 'Ação Social',
     color: '#16A085',
     glyph: '♥',
     members: [
-      { name: 'Jorge Bures', role: 'Diretor de Ação Social'  },
-      { name: 'André Luiz',  role: 'Diretor de Ação Social'  },
-      { name: 'Álvaro',      role: 'Diretor de Ação Social'  },
-      { name: 'Ana Luiza',   role: 'Diretora de Ação Social' },
+      { name: 'Jorge Bures', role: 'Diretor de Ação Social' },
+      { name: 'André Luiz', role: 'Diretor de Ação Social' },
+      { name: 'Álvaro', role: 'Diretor de Ação Social' },
+      { name: 'Ana Luiza', role: 'Diretora de Ação Social' },
     ],
   },
   {
-    id:    'tech',
+    id: 'tech',
     label: 'Tecnologia',
     color: '#2C3E50',
     glyph: '</> ',
@@ -124,63 +124,10 @@ const DEPARTMENTS = [
 // Total count
 const TOTAL_MEMBERS = DEPARTMENTS.reduce((a, d) => a + d.members.length, 0);
 
-// ─────────────────────────────────────────────────────────────────────────────
-// DARK MODE HOOK
-// ─────────────────────────────────────────────────────────────────────────────
-function useIsDark() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    const check = () => setIsDark(document.documentElement.classList.contains('dark'));
-    check();
-    const obs = new MutationObserver(check);
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => obs.disconnect();
-  }, []);
-  return isDark;
-}
+import { useIsDark } from '@/lib/perf';
+import { CursorBlob, Noise } from '@/components/effects/SharedEffects';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CURSOR BLOB
-// ─────────────────────────────────────────────────────────────────────────────
-function CursorBlob({ isDark }: { isDark: boolean }) {
-  const x = useMotionValue(-999);
-  const y = useMotionValue(-999);
-  const sx = useSpring(x, { stiffness: 50, damping: 18 });
-  const sy = useSpring(y, { stiffness: 50, damping: 18 });
-  useEffect(() => {
-    const fn = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); };
-    window.addEventListener('mousemove', fn);
-    return () => window.removeEventListener('mousemove', fn);
-  }, [x, y]);
-  return (
-    <motion.div
-      className="fixed pointer-events-none z-0"
-      style={{
-        left: sx, top: sy,
-        width: 500, height: 500,
-        marginLeft: -250, marginTop: -250,
-        background: isDark
-          ? 'radial-gradient(circle, rgba(176,142,104,0.06) 0%, rgba(0,91,236,0.03) 50%, transparent 70%)'
-          : 'radial-gradient(circle, rgba(0,91,236,0.05) 0%, rgba(176,142,104,0.03) 50%, transparent 70%)',
-        borderRadius: '50%',
-        filter: 'blur(40px)',
-      }}
-    />
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// NOISE OVERLAY
-// ─────────────────────────────────────────────────────────────────────────────
-function Noise() {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[1] mix-blend-overlay opacity-25"
-      style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E")`,
-      }}
-    />
-  );
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GRID BACKGROUND
@@ -388,7 +335,7 @@ function DeptSection({
 function Hero({ isDark }: { isDark: boolean }) {
   const { scrollY } = useScroll();
   const parallax = useTransform(scrollY, [0, 600], [0, -120]);
-  const fade     = useTransform(scrollY, [0, 400], [1, 0]);
+  const fade = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
     <section className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -538,24 +485,27 @@ function ManifestoStrip({ isDark }: { isDark: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-20%' });
   const text = 'ÁGUIA VOA COM ÁGUIA  ·  ESTD. 2026–27  ·  AGROTÓXICA  ·';
-  const rep  = Array(8).fill(text).join('  ');
+  const rep = Array(8).fill(text).join('  ');
 
   return (
     <div ref={ref} className="relative w-full overflow-hidden py-5 mb-16"
       style={{
-        borderTop:    `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'}`,
+        borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'}`,
         borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'}`,
-        background:   isDark ? 'rgba(0,91,236,0.04)' : 'rgba(0,91,236,0.02)',
+        background: isDark ? 'rgba(0,91,236,0.04)' : 'rgba(0,91,236,0.02)',
       }}
     >
-      <motion.div
+      <div
         className="whitespace-nowrap font-space font-black text-[11px] uppercase tracking-[0.35em] text-agro-blue"
-        style={{ opacity: 0.5 }}
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        style={{
+          opacity: 0.5,
+          animation: 'marquee-ltr 30s linear infinite',
+          willChange: 'transform',
+          display: 'inline-block'
+        }}
       >
         {rep}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -685,8 +635,8 @@ export default function DiretoriaPage() {
             className="px-4 py-2 rounded-full font-space font-bold text-[10px] uppercase tracking-widest transition-all"
             style={{
               background: !activeFilter ? B.blue : 'transparent',
-              color:      !activeFilter ? '#fff' : (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)'),
-              border:     !activeFilter ? '1px solid transparent' : `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
+              color: !activeFilter ? '#fff' : (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)'),
+              border: !activeFilter ? '1px solid transparent' : `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
             }}
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.93 }}
@@ -700,8 +650,8 @@ export default function DiretoriaPage() {
               className="px-4 py-2 rounded-full font-space font-bold text-[10px] uppercase tracking-widest transition-all"
               style={{
                 background: activeFilter === d.id ? d.color : 'transparent',
-                color:      activeFilter === d.id ? '#fff' : (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)'),
-                border:     activeFilter === d.id ? '1px solid transparent' : `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
+                color: activeFilter === d.id ? '#fff' : (isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)'),
+                border: activeFilter === d.id ? '1px solid transparent' : `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
               }}
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.93 }}

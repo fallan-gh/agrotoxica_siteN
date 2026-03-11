@@ -6,6 +6,7 @@ import {
   useInView,
 } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { products } from '../../data/products';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13,20 +14,20 @@ import { products } from '../../data/products';
 // ─────────────────────────────────────────────────────────────────────────────
 const PALETTES = {
   dark: {
-    bg: '#14100B',         
-    bgMid: '#1C1610',      
-    text: '#FFF8D6',       
-    accent: '#D4AF37',     
-    accentDark: '#996515', 
-    black: '#0A0908',      
-    fireGlow: '#D87A21',   
-    blue: '#002E79',       
-    green: '#5CBA47',      
+    bg: '#14100B',
+    bgMid: '#1C1610',
+    text: '#FFF8D6',
+    accent: '#D4AF37',
+    accentDark: '#996515',
+    black: '#0A0908',
+    fireGlow: '#D87A21',
+    blue: '#002E79',
+    green: '#5CBA47',
     greenHover: '#469634',
     greenShadow: 'rgba(92, 186, 71, 0.4)',
     greenBorder: '#75D45C',
     btnText: '#FFF',
-    
+
     glow1: 'rgba(216, 122, 33, 0.08)',
     glow2: 'rgba(212, 175, 55, 0.03)',
     vhGrad1: 'rgba(216, 122, 33, 0.15)',
@@ -42,15 +43,15 @@ const PALETTES = {
     vidFilter: 'brightness(0.3) saturate(0.8)',
   },
   light: {
-    bg: '#F3EFE6',         
-    bgMid: '#E8E1D5',      
-    text: '#0F141E',       
-    accent: '#B88A44',     
-    accentDark: '#8B6530', 
-    black: '#FFFFFF',      
-    fireGlow: '#FFFFFF',   
-    blue: '#001A4D',       
-    green: '#1A4010',      
+    bg: '#F3EFE6',
+    bgMid: '#E8E1D5',
+    text: '#0F141E',
+    accent: '#B88A44',
+    accentDark: '#8B6530',
+    black: '#FFFFFF',
+    fireGlow: '#FFFFFF',
+    blue: '#001A4D',
+    green: '#1A4010',
     greenHover: '#122E0B',
     greenShadow: 'rgba(26, 64, 16, 0.3)',
     greenBorder: '#235716',
@@ -68,16 +69,16 @@ const PALETTES = {
     cardBorderHover: 'rgba(184, 138, 68, 0.8)',
     cardShadow: 'rgba(184, 138, 68, 0.15)',
     cardInfoBg: 'rgba(255,255,255,0.8)',
-    vidFilter: 'brightness(0.9) saturate(1.1) sepia(0.2)', 
+    vidFilter: 'brightness(0.9) saturate(1.1) sepia(0.2)',
   }
 };
 
 const ThemeContext = createContext(PALETTES.dark);
 const useTheme = () => useContext(ThemeContext);
 
-const E  = [0.22, 1, 0.36, 1]    as const;
+const E = [0.22, 1, 0.36, 1] as const;
 const EB = [0.34, 1.56, 0.64, 1] as const;
-const ES = [0.16, 1, 0.30, 1]    as const;
+const ES = [0.16, 1, 0.30, 1] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FIRE EMBERS
@@ -87,16 +88,19 @@ function FireEmbers() {
   const [embers, setEmbers] = useState<any[]>([]);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return; // skip on mobile for perf
     const newEmbers = Array.from({ length: 40 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       size: Math.random() * 4 + 1,
       duration: Math.random() * 15 + 10,
-      delay: Math.random() * -20, 
+      delay: Math.random() * -20,
       opacity: Math.random() * 0.6 + 0.2,
     }));
     setEmbers(newEmbers);
   }, []);
+
+  if (typeof window !== 'undefined' && window.innerWidth < 768) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[2] overflow-hidden mix-blend-screen">
@@ -111,10 +115,11 @@ function FireEmbers() {
             background: `radial-gradient(circle, #FFF 0%, ${C.fireGlow} 40%, transparent 100%)`,
             boxShadow: `0 0 ${ember.size * 2}px ${C.fireGlow}`,
             opacity: ember.opacity,
+            willChange: 'transform, opacity',
           }}
           initial={{ y: '100vh', x: 0 }}
-          animate={{ 
-            y: '-10vh', 
+          animate={{
+            y: '-10vh',
             x: [0, Math.random() * 100 - 50, Math.random() * 100 - 50, 0],
             opacity: [0, ember.opacity, ember.opacity, 0]
           }}
@@ -139,30 +144,30 @@ function CursorGlow() {
   const sx = useSpring(mx, { stiffness: 60, damping: 20 });
   const sy = useSpring(my, { stiffness: 60, damping: 20 });
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     const fn = (e: MouseEvent) => { mx.set(e.clientX); my.set(e.clientY); };
-    window.addEventListener('mousemove', fn);
+    window.addEventListener('mousemove', fn, { passive: true });
     return () => window.removeEventListener('mousemove', fn);
   }, [mx, my]);
+
+  if (typeof window !== 'undefined' && window.innerWidth < 768) return null;
+
   return (
     <motion.div className="fixed pointer-events-none z-[1]" style={{
       left: sx, top: sy,
-      width: 800, height: 800,
-      marginLeft: -400, marginTop: -400,
+      width: 500, height: 500,
+      marginLeft: -250, marginTop: -250,
       background: `radial-gradient(circle, ${C.glow1} 0%, ${C.glow2} 45%, transparent 70%)`,
       borderRadius: '50%',
-      filter: 'blur(60px)',
-      transition: 'background 0.5s ease'
+      // REMOVED VERY EXPENSIVE BLUR: filter: 'blur(60px)',
+      transition: 'background 0.5s ease',
+      willChange: 'transform',
+      transform: 'translateZ(0)',
     }} />
   );
 }
 
-function Noise() {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[1] mix-blend-overlay opacity-30"
-      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E")` }}
-    />
-  );
-}
+import { Noise } from '@/components/effects/SharedEffects';
 
 function Marquee({ text, dir = 1, speed = 50, op = 0.15, small = false }: { text: string; dir?: number; speed?: number; op?: number; small?: boolean; }) {
   const C = useTheme();
@@ -254,7 +259,7 @@ function ManifestoWordCIA({ word, accent, index }: { word: string; accent: boole
       {/* 🚀 BUG CORRIGIDO: Removido o WebkitBackgroundClip daqui também */}
       <motion.span
         className="inline-block font-cinzel font-black text-4xl md:text-6xl lg:text-[5rem] uppercase leading-tight"
-        style={{ 
+        style={{
           color: accent ? C.accent : C.text,
           textShadow: accent ? `0 0 20px ${C.cardShadow}` : '0 0 20px rgba(0,0,0,0.1)',
           transition: 'color 0.5s ease'
@@ -280,7 +285,7 @@ function VideoHero() {
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {});
+    v.play().catch(() => { });
     const onReady = () => setLoaded(true);
     v.addEventListener('canplay', onReady);
     return () => v.removeEventListener('canplay', onReady);
@@ -294,7 +299,7 @@ function VideoHero() {
 
       <div className="absolute inset-0 z-[1]" style={{ background: `linear-gradient(180deg, ${C.vhGrad1} 0%, ${C.vhGrad2} 50%, ${C.vhGrad3} 100%)`, transition: 'background 0.5s ease' }} />
       <div className="absolute inset-0 z-[1]" style={{ background: `radial-gradient(ellipse at center, transparent 20%, ${C.vhRadial} 100%)`, transition: 'background 0.5s ease' }} />
-      
+
       <div className="absolute top-8 w-full z-[5]">
         <Marquee text="AGROTÓXICA  ·  CIA  ·  EDIÇÃO EXCLUSIVA  ·  EVENTO OFICIAL  ·  ATLÉTICA" dir={1} speed={38} op={0.2} />
       </div>
@@ -324,7 +329,7 @@ function VideoHero() {
             animate={{ y: '0%' }}
             transition={{ duration: 1.3, delay: 0.7, ease: ES }}
           >
-            O Campo<br/>Que Te Pertence
+            O Campo<br />Que Te Pertence
           </motion.h1>
         </div>
 
@@ -346,10 +351,10 @@ function EventInfoBar() {
   const inView = useInView(ref, { once: true });
 
   const infos = [
-    { label: 'Evento',  value: 'CIA' },
-    { label: 'Edição',  value: '2026' },
-    { label: 'Peças',   value: `${products.length}` },
-    { label: 'Status',  value: 'Limitado' },
+    { label: 'Evento', value: 'CIA' },
+    { label: 'Edição', value: '2026' },
+    { label: 'Peças', value: `${products.length}` },
+    { label: 'Status', value: 'Limitado' },
   ];
 
   return (
@@ -381,7 +386,7 @@ function ManifestoCIA() {
   const C = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-15%' });
-  const words = [ { w: 'Imperial.', accent: false }, { w: 'Bruto.', accent: true }, { w: 'Exclusivo.', accent: false }, { w: 'Agrotóxica.', accent: true } ];
+  const words = [{ w: 'Imperial.', accent: false }, { w: 'Bruto.', accent: true }, { w: 'Exclusivo.', accent: false }, { w: 'Agrotóxica.', accent: true }];
 
   return (
     <section ref={ref} className="relative w-full py-40 overflow-hidden" style={{ background: C.bgMid, transition: 'background 0.5s ease' }}>
@@ -441,8 +446,7 @@ function ProductCardCIA({ produto, index }: { produto: typeof products[0]; index
           </div>
 
           <div className="aspect-[3/4] flex items-center justify-center overflow-hidden p-6 relative">
-            <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(circle at 50% 65%, ${C.cardShadow} 0%, transparent 70%)`, opacity: hovered ? 1 : 0, transition: 'opacity 0.45s ease', pointerEvents: 'none' }} />
-            <img src={produto.image} alt={produto.nome} className="w-full h-full object-contain" style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))', transform: hovered ? 'scale(1.08)' : 'scale(1)', transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)' }} />
+            <Image src={produto.image} alt={produto.nome} width={400} height={400} className="w-full h-full object-contain" style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.8))', transform: hovered ? 'scale(1.08)' : 'scale(1)', transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)' }} />
           </div>
 
           <div className="p-5" style={{ background: C.cardInfoBg, borderTop: `1px solid ${C.cardBorder}`, transition: 'background 0.5s ease, border-color 0.5s ease' }}>
@@ -468,14 +472,14 @@ function CatalogSection() {
   return (
     <section id="catalogo" ref={ref} className="relative w-full py-32 overflow-hidden" style={{ background: C.bg, transition: 'background 0.5s ease' }}>
       <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: `radial-gradient(circle at 20% 50%, ${C.fireGlow} 0%, transparent 40%), radial-gradient(circle at 80% 80%, ${C.accent} 0%, transparent 40%)` }} />
-      
+
       <div className="container mx-auto px-6 md:px-12 mb-20 relative z-10">
         <div className="flex items-end justify-between">
           <div>
             <div className="overflow-hidden">
               <motion.span className="block font-cinzel font-black text-4xl md:text-6xl uppercase leading-none" style={{ color: C.text, transition: 'color 0.5s ease' }} initial={{ y: '110%' }} animate={inView ? { y: '0%' } : {}} transition={{ duration: 0.8, delay: 0.2, ease: ES }}>Coleção</motion.span>
             </div>
-            
+
             {/* 🚀 BUG DO TIJOLÃO RESOLVIDO: Título CIA 2026 */}
             <div className="overflow-hidden">
               <motion.span className="block font-cinzel font-black text-5xl md:text-7xl uppercase leading-none"
@@ -516,7 +520,7 @@ function CIASeal() {
         <motion.p className="font-cinzel text-xs uppercase tracking-[0.6em] font-bold" style={{ color: C.accent, transition: 'color 0.5s ease' }} initial={{ opacity: 0, y: 15 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.2 }}>
           — Agrotóxica × CIA
         </motion.p>
-        
+
         {/* 🚀 BUG DO TIJOLÃO RESOLVIDO: Texto Final */}
         <div className="overflow-hidden">
           <motion.h2 className="font-cinzel font-black text-5xl md:text-7xl uppercase leading-none pb-2"
@@ -547,7 +551,7 @@ export default function CIAPage() {
       // Quando a Hotbar tira a classe .dark, ativamos o Fundo Marfim Imperial (Modo Claro)
       setIsAltMode(!document.documentElement.classList.contains('dark'));
     };
-    checkDark(); 
+    checkDark();
     const observer = new MutationObserver(checkDark);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     return () => observer.disconnect();

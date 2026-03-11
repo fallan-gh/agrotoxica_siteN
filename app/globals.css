@@ -55,3 +55,114 @@ select,
 model-viewer, model-viewer * {
   cursor: grab !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   🚀 PERFORMANCE ANIMATIONS — GPU-accelerated keyframes
+   Replaces Framer Motion JS-driven loops for maximum mobile FPS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* MARQUEE — replaces Framer Motion's animate={{ x }} */
+@keyframes marquee-ltr {
+  0%   { transform: translateX(0) translateZ(0); }
+  100% { transform: translateX(-50%) translateZ(0); }
+}
+@keyframes marquee-rtl {
+  0%   { transform: translateX(-50%) translateZ(0); }
+  100% { transform: translateX(0) translateZ(0); }
+}
+
+/* GRID PULSE — replaces 140 individual motion.div opacity animations */
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0; }
+  30%      { opacity: 0.06; }
+  60%      { opacity: 0; }
+  80%      { opacity: 0.04; }
+}
+
+/* SCANLINE SWEEP — replaces Framer's 0.14s backgroundPositionY loop */
+.scanline-sweep {
+  animation: scanline-scroll 0.3s linear infinite;
+  will-change: transform;
+}
+@keyframes scanline-scroll {
+  0%   { background-position-y: 0; }
+  100% { background-position-y: 4px; }
+}
+
+/* GLITCH LAYERS — replaces Framer Motion animate on 2 spans per glitch */
+.glitch-layer-1 {
+  animation: glitch-shift-1 4.5s ease-in-out 8s infinite;
+  will-change: transform, opacity;
+}
+.glitch-layer-2 {
+  animation: glitch-shift-2 4.5s ease-in-out 8.08s infinite;
+  will-change: transform, opacity;
+}
+@keyframes glitch-shift-1 {
+  0%, 100% { transform: translateX(0) translateZ(0); opacity: 0; }
+  20%      { transform: translateX(-6px) translateZ(0); opacity: 0.9; }
+  40%      { transform: translateX(5px) translateZ(0);  opacity: 0; }
+  60%      { transform: translateX(-2px) translateZ(0); opacity: 0.6; }
+  80%      { transform: translateX(0) translateZ(0);    opacity: 0; }
+}
+@keyframes glitch-shift-2 {
+  0%, 100% { transform: translateX(0) translateZ(0); opacity: 0; }
+  20%      { transform: translateX(7px) translateZ(0);  opacity: 0.6; }
+  40%      { transform: translateX(-4px) translateZ(0); opacity: 0; }
+  60%      { transform: translateX(3px) translateZ(0);  opacity: 0.4; }
+  80%      { transform: translateX(0) translateZ(0);    opacity: 0; }
+}
+
+/* ORBIT RING ROTATION — pure CSS replaces Framer rotate loop */
+@keyframes orbit-spin {
+  from { transform: rotate(0deg) translateZ(0); }
+  to   { transform: rotate(360deg) translateZ(0); }
+}
+
+/* COUNTER PULSE — replaces Framer opacity loop on counter elements */
+@keyframes counter-pulse {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.9; }
+}
+
+/* GOLD DOT PULSE — replaces Framer scale+opacity loop */
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(1) translateZ(0); opacity: 1; }
+  50%      { transform: scale(1.7) translateZ(0); opacity: 0.3; }
+}
+
+/* CURSOR BLINK — replaces Framer opacity loop on typewriter cursor */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* SHINE SWEEP on hover — replaces Framer backgroundPositionX loop */
+@keyframes shine-sweep {
+  0%   { background-position-x: 200%; }
+  100% { background-position-x: -200%; }
+}
+
+/* TEXT SHADOW GLOW — for StatsBar numbers */
+@keyframes text-glow {
+  0%, 100% { text-shadow: 0 0 0px rgba(176,142,104,0); }
+  50%      { text-shadow: 0 0 25px rgba(176,142,104,0.6); }
+}
+
+/* SCROLL BOUNCE — for the "Scroll" indicator */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0) translateZ(0); }
+  50%      { transform: translateY(6px) translateZ(0); }
+}
+
+/* Disable heavy animations on mobile to preserve battery + FPS */
+@media (max-width: 767px) {
+  .scanline-sweep {
+    animation: none !important;
+  }
+  .glitch-layer-1,
+  .glitch-layer-2 {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}

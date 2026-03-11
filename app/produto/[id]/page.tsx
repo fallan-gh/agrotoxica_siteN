@@ -3,9 +3,9 @@ import { motion, useMotionValue, useSpring, AnimatePresence, useScroll, useTrans
 import { products } from '../../../data/products';
 import { useState, useEffect, use, useRef } from 'react';
 import Link from 'next/link';
-import { useCart } from '../../../lib/cart'; 
+import { useCart } from '../../../lib/cart';
 
-const easeInOut = [0.25, 0.1, 0.25, 1];
+const easeInOut: [number, number, number, number] = [0.25, 0.1, 0.25, 1];
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -382,7 +382,7 @@ function AdvancedBackground({ nomeProduto, tipoProduto }: { nomeProduto: string;
 export default function ProductPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
   const params = use(paramsPromise);
   const produto = products.find((p) => String(p.id) === String(params.id));
-  
+
   const [selectedColor, setSelectedColor] = useState('');
   const { addItem } = useCart();
   const [isAdding, setIsAdding] = useState(false);
@@ -390,20 +390,19 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
   useEffect(() => {
     if (produto) {
       setSelectedColor(produto.cores?.[0] || '');
-      import('@google/model-viewer');
     }
   }, [produto]);
 
   if (!produto) return null;
 
   // 🛡️ Lógica para obter a galeria correta e o modelo 3D baseado na cor
-  const currentGallery = produto.galeria 
+  const currentGallery = produto.galeria
     ? (Array.isArray(produto.galeria) ? produto.galeria : (produto.galeria as any)[selectedColor] || [])
     : [];
 
-  const currentModel = typeof produto.model3d === 'string' 
-    ? produto.model3d 
-    : produto.model3d[selectedColor];
+  const currentModel = typeof produto.model3d === 'string'
+    ? produto.model3d
+    : (produto.model3d as unknown as Record<string, string>)[selectedColor];
 
   const handleAddToCart = () => {
     if (isAdding) return;
@@ -453,7 +452,7 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
                 </span>
               </div>
             </model-viewer>
-            
+
             {/* Texto Disclaimer */}
             <span className="font-poppins text-xs uppercase tracking-widest text-agro-blue opacity-60 mt-2 pb-2">
               imagens meramente ilustrativas
@@ -493,11 +492,10 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
                     <button
                       key={cor}
                       onClick={() => setSelectedColor(cor)}
-                      className={`px-8 py-3 rounded-2xl font-bold uppercase transition-all duration-300 border-2 ${
-                        selectedColor === cor
-                          ? 'bg-agro-blue text-agro-card border-agro-blue scale-105 shadow-lg shadow-agro-blue/20'
-                          : 'bg-transparent text-agro-blue border-agro-blue/20 hover:border-agro-gold'
-                      }`}
+                      className={`px-8 py-3 rounded-2xl font-bold uppercase transition-all duration-300 border-2 ${selectedColor === cor
+                        ? 'bg-agro-blue text-agro-card border-agro-blue scale-105 shadow-lg shadow-agro-blue/20'
+                        : 'bg-transparent text-agro-blue border-agro-blue/20 hover:border-agro-gold'
+                        }`}
                     >
                       {cor}
                     </button>
@@ -512,15 +510,14 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
                 disabled={isAdding}
                 whileHover={!isAdding ? { scale: 1.02, boxShadow: '0 20px 40px -10px rgba(176,142,104,0.5)' } : {}}
                 whileTap={!isAdding ? { scale: 0.98 } : {}}
-                className={`font-space font-bold mt-4 py-6 px-8 text-3xl md:text-4xl uppercase rounded-[2rem] transition-all duration-500 w-full text-center tracking-wider overflow-hidden relative group ${
-                  isAdding 
-                    ? 'bg-agro-blue text-white cursor-default' 
-                    : 'bg-agro-gold text-white hover:bg-agro-blue hover:text-agro-card'
-                }`}
+                className={`font-space font-bold mt-4 py-6 px-8 text-3xl md:text-4xl uppercase rounded-[2rem] transition-all duration-500 w-full text-center tracking-wider overflow-hidden relative group ${isAdding
+                  ? 'bg-agro-blue text-white cursor-default'
+                  : 'bg-agro-gold text-white hover:bg-agro-blue hover:text-agro-card'
+                  }`}
               >
                 <AnimatePresence mode="wait">
                   {isAdding ? (
-                    <motion.span 
+                    <motion.span
                       key="added"
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
@@ -533,7 +530,7 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
                       Adicionado
                     </motion.span>
                   ) : (
-                    <motion.span 
+                    <motion.span
                       key="add"
                       initial={{ y: -20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
@@ -544,7 +541,7 @@ export default function ProductPage({ params: paramsPromise }: { params: Promise
                     </motion.span>
                   )}
                 </AnimatePresence>
-                
+
                 {!isAdding && (
                   <div className="absolute inset-0 bg-agro-blue translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
                 )}

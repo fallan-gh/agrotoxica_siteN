@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGROTÓXICA — Painel de Controle</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap');
+
+    :root {
+      --gold: #B08E68;
+      --blue: #005BEC;
+      --bg: #0a0703;
+      --card: #110D09;
+      --border: rgba(176, 142, 104, 0.3);
+      --text: #F7F2EB;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 2px,
+          rgba(176, 142, 104, 0.04) 2px, rgba(176, 142, 104, 0.04) 3px);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 560px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 2.5rem;
+      position: relative;
+      box-shadow: 0 0 60px -15px rgba(176, 142, 104, 0.2);
+    }
+
+    /* Corner crosses */
+    .container::before,
+    .container::after {
+      content: '+';
+      position: absolute;
+      color: var(--gold);
+      font-size: 1.2rem;
+      opacity: 0.5;
+    }
+
+    .container::before {
+      top: 8px;
+      left: 12px;
+    }
+
+    .container::after {
+      bottom: 8px;
+      right: 12px;
+    }
+
+    .top-line,
+    .bottom-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+
+    .top-line {
+      top: 0;
+    }
+
+    .bottom-line {
+      bottom: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      background: rgba(176, 142, 104, 0.08);
+      padding: 3px 10px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(247, 242, 235, 0.35);
+      margin-bottom: 2rem;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      background: #070502;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Space Grotesk', monospace;
+      font-size: 0.95rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .toggle-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .toggle-track {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--border);
+      background: #070502;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .toggle input:checked~.toggle-track {
+      background: var(--gold);
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: var(--text);
+      transition: transform 0.3s;
+      pointer-events: none;
+    }
+
+    .toggle input:checked~.toggle-track .toggle-thumb {
+      transform: translateX(22px);
+      background: var(--bg);
+    }
+
+    .separator {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .security-note {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: rgba(247, 242, 235, 0.3);
+      margin-bottom: 1.5rem;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold);
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.3s;
+    }
+
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-101%);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    button[type="submit"]:hover::before {
+      transform: translateX(0);
+    }
+
+    button[type="submit"]:hover {
+      color: var(--bg);
+    }
+
+    button[type="submit"] span {
+      position: relative;
+      z-index: 1;
+    }
+
+    #feedback {
+      margin-top: 1rem;
+      padding: 10px 14px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      display: none;
+    }
+
+    #feedback.success {
+      display: block;
+      border: 1px solid rgba(176, 142, 104, 0.5);
+      background: rgba(176, 142, 104, 0.1);
+      color: var(--gold);
+    }
+
+    #feedback.error {
+      display: block;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    .current-config {
+      margin-top: 2rem;
+      border: 1px solid var(--border);
+      background: #070502;
+      padding: 1rem;
+    }
+
+    .current-config-title {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    pre {
+      font-size: 11px;
+      color: rgba(247, 242, 235, 0.5);
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="top-line"></div>
+    <div class="bottom-line"></div>
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      SISTEMA RESTRITO
+    </div>
+
+    <h1>Painel de Controle</h1>
+    <p class="subtitle">Agrotóxica · Popup de Desconto</p>
+
+    <form id="popup-form">
+
+      <div class="toggle-row">
+        <label class="toggle">
+          <input type="checkbox" id="active" />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+        <span class="toggle-label">Popup Ativo</span>
+      </div>
+
+      <div class="field">
+        <label for="title">Título da Campanha</label>
+        <input type="text" id="title" placeholder="ex: Dia das Mães" />
+      </div>
+
+      <div class="field">
+        <label for="discount">Desconto</label>
+        <input type="text" id="discount" placeholder="ex: 40% OFF" />
+      </div>
+
+      <div class="field">
+        <label for="description">Descrição</label>
+        <textarea id="description" rows="3" placeholder="Mensagem de apoio..."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="couponCode">Código do Cupom</label>
+        <input type="text" id="couponCode" placeholder="ex: MAETOXICA40" style="text-transform:uppercase;" />
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="field">
+        <label for="apiKey">🔑 API Key (obrigatório)</label>
+        <input type="password" id="apiKey" placeholder="Chave secreta de autorização" />
+      </div>
+      <p class="security-note">⚠ A chave é comparada com POPUP_API_KEY no .env.local do servidor. Sem ela, nenhuma
+        alteração é salva.</p>
+
+      <button type="submit"><span>AUTORIZAR ATUALIZAÇÃO</span></button>
+      <div id="feedback"></div>
+    </form>
+
+    <div class="current-config">
+      <p class="current-config-title">⬇ Configuração Atual (do Servidor)</p>
+      <pre id="current-json">Carregando...</pre>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api/popup';
+
+    // Carrega a config atual e preenche o formulário
+    async function loadConfig() {
+      try {
+        const res = await fetch(API);
+        const data = await res.json();
+        document.getElementById('current-json').textContent = JSON.stringify(data, null, 2);
+        document.getElementById('active').checked = data.active;
+        document.getElementById('title').value = data.title || '';
+        document.getElementById('discount').value = data.discount || '';
+        document.getElementById('description').value = data.description || '';
+        document.getElementById('couponCode').value = data.couponCode || '';
+      } catch (e) {
+        document.getElementById('current-json').textContent = 'Erro ao carregar config.';
+      }
+    }
+
+    // Envia atualização via POST protegido
+    document.getElementById('popup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const feedback = document.getElementById('feedback');
+      feedback.className = '';
+      feedback.style.display = 'none';
+
+      const apiKey = document.getElementById('apiKey').value.trim();
+      if (!apiKey) {
+        feedback.className = 'error';
+        feedback.textContent = '[ ERRO ] API Key não informada.';
+        return;
+      }
+
+      const payload = {
+        active: document.getElementById('active').checked,
+        title: document.getElementById('title').value.trim(),
+        discount: document.getElementById('discount').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        couponCode: document.getElementById('couponCode').value.trim().toUpperCase(),
+      };
+
+      try {
+        const res = await fetch(API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': apiKey,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          feedback.className = 'success';
+          feedback.textContent = '[ OK ] Configuração atualizada com sucesso.';
+          document.getElementById('current-json').textContent = JSON.stringify(data.config, null, 2);
+        } else {
+          feedback.className = 'error';
+          feedback.textContent = `[ ERRO ${res.status} ] ${data.error || 'Falha desconhecida.'}`;
+        }
+      } catch (err) {
+        feedback.className = 'error';
+        feedback.textContent = `[ ERRO ] Falha na requisição: ${err.message}`;
+      }
+    });
+
+    loadConfig();
+  </script>
+</body>
+
+</html>
