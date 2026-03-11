@@ -1,6 +1,7 @@
 import './globals.css';
 import Hotbar from '../components/Hotbar';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: 'Associação Atlética Agrotóxica',
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="font-poppins antialiased">
         {children}
         <Hotbar />
+        <Analytics />
         <Script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js" strategy="lazyOnload" />
       </body>
     </html>
