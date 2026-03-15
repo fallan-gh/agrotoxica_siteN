@@ -23,10 +23,14 @@
 
 /* 🌙 MODO ESCURO - O que muda quando aperta o botão */
 .dark {
-  --color-blue: #F7F2EB; /* Azul vira branco para ler no fundo escuro */
-  --color-gold: #B08E68; /* Dourado se mantém igual */
-  --color-bg: #110D09;   /* Fundo vira Preto */
-  --color-card: #1A1612; /* Card vira Grafite */
+  --color-blue: #F7F2EB;
+  /* Azul vira branco para ler no fundo escuro */
+  --color-gold: #B08E68;
+  /* Dourado se mantém igual */
+  --color-bg: #110D09;
+  /* Fundo vira Preto */
+  --color-card: #1A1612;
+  /* Card vira Grafite */
 }
 
 /* Fundo base suave, sem !important */
@@ -35,6 +39,7 @@ body {
   color: var(--color-blue);
   transition: background-color 0.4s ease, color 0.4s ease;
 }
+
 /* 🖱️ CURSOR BLINDADO - AGROTÓXICA */
 * {
   /* Forçamos em todos os elementos (*) para não ter erro */
@@ -42,17 +47,18 @@ body {
 }
 
 /* Elementos de interação */
-button, 
-a, 
-input, 
-select, 
+button,
+a,
+input,
+select,
 [role="button"],
 .cursor-pointer {
   cursor: url('/cursorsite.svg') 0 0, pointer !important;
 }
 
 /* Mantemos o grab no 3D para não bugar a experiência */
-model-viewer, model-viewer * {
+model-viewer,
+model-viewer * {
   cursor: grab !important;
 }
 
@@ -63,20 +69,44 @@ model-viewer, model-viewer * {
 
 /* MARQUEE — replaces Framer Motion's animate={{ x }} */
 @keyframes marquee-ltr {
-  0%   { transform: translateX(0) translateZ(0); }
-  100% { transform: translateX(-50%) translateZ(0); }
+  0% {
+    transform: translateX(0) translateZ(0);
+  }
+
+  100% {
+    transform: translateX(-50%) translateZ(0);
+  }
 }
+
 @keyframes marquee-rtl {
-  0%   { transform: translateX(-50%) translateZ(0); }
-  100% { transform: translateX(0) translateZ(0); }
+  0% {
+    transform: translateX(-50%) translateZ(0);
+  }
+
+  100% {
+    transform: translateX(0) translateZ(0);
+  }
 }
 
 /* GRID PULSE — replaces 140 individual motion.div opacity animations */
 @keyframes grid-pulse {
-  0%, 100% { opacity: 0; }
-  30%      { opacity: 0.06; }
-  60%      { opacity: 0; }
-  80%      { opacity: 0.04; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0.06;
+  }
+
+  60% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 0.04;
+  }
 }
 
 /* SCANLINE SWEEP — replaces Framer's 0.14s backgroundPositionY loop */
@@ -84,9 +114,16 @@ model-viewer, model-viewer * {
   animation: scanline-scroll 0.3s linear infinite;
   will-change: transform;
 }
+
 @keyframes scanline-scroll {
-  0%   { background-position-y: 0; }
-  100% { background-position-y: 4px; }
+  0% {
+    background-position-y: 0;
+  }
+
+  100% {
+    background-position-y: 4px;
+  }
+  
 }
 
 /* GLITCH LAYERS — replaces Framer Motion animate on 2 spans per glitch */
@@ -94,65 +131,241 @@ model-viewer, model-viewer * {
   animation: glitch-shift-1 4.5s ease-in-out 8s infinite;
   will-change: transform, opacity;
 }
+
 .glitch-layer-2 {
   animation: glitch-shift-2 4.5s ease-in-out 8.08s infinite;
   will-change: transform, opacity;
 }
+
 @keyframes glitch-shift-1 {
-  0%, 100% { transform: translateX(0) translateZ(0); opacity: 0; }
-  20%      { transform: translateX(-6px) translateZ(0); opacity: 0.9; }
-  40%      { transform: translateX(5px) translateZ(0);  opacity: 0; }
-  60%      { transform: translateX(-2px) translateZ(0); opacity: 0.6; }
-  80%      { transform: translateX(0) translateZ(0);    opacity: 0; }
+
+  0%,
+  100% {
+    transform: translateX(0) translateZ(0);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translateX(-6px) translateZ(0);
+    opacity: 0.9;
+  }
+
+  40% {
+    transform: translateX(5px) translateZ(0);
+    opacity: 0;
+  }
+
+  60% {
+    transform: translateX(-2px) translateZ(0);
+    opacity: 0.6;
+  }
+
+  80% {
+    transform: translateX(0) translateZ(0);
+    opacity: 0;
+  }
 }
+
 @keyframes glitch-shift-2 {
-  0%, 100% { transform: translateX(0) translateZ(0); opacity: 0; }
-  20%      { transform: translateX(7px) translateZ(0);  opacity: 0.6; }
-  40%      { transform: translateX(-4px) translateZ(0); opacity: 0; }
-  60%      { transform: translateX(3px) translateZ(0);  opacity: 0.4; }
-  80%      { transform: translateX(0) translateZ(0);    opacity: 0; }
+
+  0%,
+  100% {
+    transform: translateX(0) translateZ(0);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translateX(7px) translateZ(0);
+    opacity: 0.6;
+  }
+
+  40% {
+    transform: translateX(-4px) translateZ(0);
+    opacity: 0;
+  }
+
+  60% {
+    transform: translateX(3px) translateZ(0);
+    opacity: 0.4;
+  }
+
+  80% {
+    transform: translateX(0) translateZ(0);
+    opacity: 0;
+  }
 }
 
 /* ORBIT RING ROTATION — pure CSS replaces Framer rotate loop */
 @keyframes orbit-spin {
-  from { transform: rotate(0deg) translateZ(0); }
-  to   { transform: rotate(360deg) translateZ(0); }
+  from {
+    transform: rotate(0deg) translateZ(0);
+  }
+
+  to {
+    transform: rotate(360deg) translateZ(0);
+  }
 }
 
 /* COUNTER PULSE — replaces Framer opacity loop on counter elements */
 @keyframes counter-pulse {
-  0%, 100% { opacity: 0.15; }
-  50%      { opacity: 0.9; }
+
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
 }
 
 /* GOLD DOT PULSE — replaces Framer scale+opacity loop */
 @keyframes dot-pulse {
-  0%, 100% { transform: scale(1) translateZ(0); opacity: 1; }
-  50%      { transform: scale(1.7) translateZ(0); opacity: 0.3; }
+
+  0%,
+  100% {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.7) translateZ(0);
+    opacity: 0.3;
+  }
 }
 
 /* CURSOR BLINK — replaces Framer opacity loop on typewriter cursor */
 @keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 /* SHINE SWEEP on hover — replaces Framer backgroundPositionX loop */
 @keyframes shine-sweep {
-  0%   { background-position-x: 200%; }
-  100% { background-position-x: -200%; }
+  0% {
+    background-position-x: 200%;
+  }
+
+  100% {
+    background-position-x: -200%;
+  }
 }
 
 /* TEXT SHADOW GLOW — for StatsBar numbers */
 @keyframes text-glow {
-  0%, 100% { text-shadow: 0 0 0px rgba(176,142,104,0); }
-  50%      { text-shadow: 0 0 25px rgba(176,142,104,0.6); }
+
+  0%,
+  100% {
+    text-shadow: 0 0 0px rgba(176, 142, 104, 0);
+  }
+
+  50% {
+    text-shadow: 0 0 25px rgba(176, 142, 104, 0.6);
+  }
 }
 
 /* SCROLL BOUNCE — for the "Scroll" indicator */
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0) translateZ(0); }
-  50%      { transform: translateY(6px) translateZ(0); }
+
+  0%,
+  100% {
+    transform: translateY(0) translateZ(0);
+  }
+
+  50% {
+    transform: translateY(6px) translateZ(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   🖥️ VIP TERMINAL — Support page keyframes
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* HUD flicker — subtle opacity glitch for decorative terminal elements */
+@keyframes terminal-flicker {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  4% {
+    opacity: 0.85;
+  }
+
+  6% {
+    opacity: 1;
+  }
+
+  42% {
+    opacity: 1;
+  }
+
+  44% {
+    opacity: 0.7;
+  }
+
+  46% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 0.9;
+  }
+
+  84% {
+    opacity: 1;
+  }
+}
+
+/* Reticle / crosshair pulse for corner bracket decorations */
+@keyframes hud-pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1) translateZ(0);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05) translateZ(0);
+  }
+}
+
+/* Radar-style sweep for a circular background decoration */
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg) translateZ(0);
+  }
+
+  to {
+    transform: rotate(360deg) translateZ(0);
+  }
+}
+
+/* HUD corner brackets fade-in on card hover */
+@keyframes hud-corner-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateZ(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
 }
 
 /* Disable heavy animations on mobile to preserve battery + FPS */
@@ -160,9 +373,25 @@ model-viewer, model-viewer * {
   .scanline-sweep {
     animation: none !important;
   }
+
   .glitch-layer-1,
   .glitch-layer-2 {
     animation: none !important;
     opacity: 0 !important;
   }
+}
+
+@keyframes agro-scan {
+    0%   { top: -4px; }
+    100% { top: 100%; }
+}
+
+@keyframes stripe-fwd {
+    from { background-position: 0 0; }
+    to   { background-position: 40px 0; }
+}
+
+@keyframes stripe-rev {
+    from { background-position: 40px 0; }
+    to   { background-position: 0 0; }
 }

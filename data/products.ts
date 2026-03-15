@@ -4,7 +4,7 @@ export const products = [
     id: 'camiseta-algodao', 
     nome: 'Camiseta Algodão', 
     type: 'Algodão', 
-    price: 'R$ 65,00', 
+    price: 'R$ 72,99', 
     descricao: 'A peça fundamental do Território. Modelagem streetwear superdimensionada, desenvolvida em algodão premium pesado (heavyweight) para um caimento estruturado, conforto extremo e durabilidade implacável.',
     image: '/assets/images/thumbs/algodao.webp', 
     model3d: {
@@ -37,7 +37,7 @@ export const products = [
     id: 'camiseta-drifit', 
     nome: 'Camiseta Dry-Fit', 
     type: 'Dri-fit', 
-    price: 'R$ 68,00', 
+    price: 'R$ 73,50', 
     descricao: 'Engenharia de alta performance. Tecido tecnológico de secagem ultra-rápida e respirabilidade máxima. Feita para aguentar o tranco sem perder a estética agressiva da marca.',
     image: '/assets/images/thumbs/drifit.webp', 
     model3d: {
@@ -79,7 +79,7 @@ export const products = [
     id: 'cropped-top', 
     nome: 'Cropped Top', 
     type: 'Top', 
-    price: 'R$ 82,00', 
+    price: 'R$ 88,99', 
     descricao: 'Corte ousado e ajuste perfeito. O Cropped Top traz a identidade da Agrotóxica com uma modelagem que valoriza a silhueta, garantindo liberdade de movimento e atitude.',
     image: '/assets/images/thumbs/cropped.webp', 
     model3d: {
@@ -121,7 +121,7 @@ export const products = [
     id: 'body', 
     nome: 'Body', 
     type: 'Body', 
-    price: 'R$ 82,00', 
+    price: 'R$ 88,99', 
     descricao: 'A fusão entre o tático e o fashion. Uma peça inteiriça com elasticidade premium, desenhada para se moldar ao corpo e servir como base para qualquer composição.',
     image: '/assets/images/thumbs/body.webp', 
     model3d: {
@@ -163,7 +163,7 @@ export const products = [
     id: 'jaqueta-college', 
     nome: 'Jaqueta College', 
     type: 'College', 
-    price: 'R$ 210,00', 
+    price: 'R$ 230,99', 
     descricao: 'A coroa da coleção. Jaqueta College clássica reimaginada com bordados de alta densidade, botões de pressão reforçados e a assinatura inconfundível do nosso estilo.',
     image: '/assets/images/thumbs/college.webp', 
     model3d: {
@@ -187,7 +187,7 @@ export const products = [
     id: 'moletom-careca', 
     nome: 'Moletom Careca', 
     type: 'Careca', 
-    price: 'R$ 158,00', 
+    price: 'R$ 169,99', 
     descricao: 'Essencial para os dias frios. Moletom felpado de alta gramatura com gola careca, punhos canelados firmes e um caimento boxy que domina a estética das ruas.',
     image: '/assets/images/thumbs/moletom.webp', 
     model3d: {
@@ -229,7 +229,7 @@ export const products = [
     id: 'calca-tactel', 
     nome: 'Calça Tactel', 
     type: 'Tactel', 
-    price: 'R$ 92,00', 
+    price: 'R$ 99,00', 
     descricao: 'Inspirada no visual utilitário. Calça em tactel leve e resistente, com elástico ajustável, bolsos estratégicos e um corte que proporciona agilidade máxima.',
     image: '/assets/images/thumbs/tactel.webp', 
     model3d: {
