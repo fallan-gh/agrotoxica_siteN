@@ -17,7 +17,7 @@ export default function RootLayout({
   // 🚀 A CHAVE DA PORTEIRA
   // true = Lockdown Ativo (Site bloqueado)
   // false = Site Liberado (Exibe vitrine, 3D e Hotbar)
-  const isLockdown = true;
+  const isLockdown = false;
 
   return (
     <html lang="pt-BR">
