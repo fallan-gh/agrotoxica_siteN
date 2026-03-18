@@ -227,8 +227,8 @@ export default function FinalizarCheckout() {
                 color: isDark ? '#d4d4d4' : '#333'
               }}
             >
-              <span className="text-agro-blue/70">cd</span> 
-              <span className="text-agro-gold">"../carrinho"</span>
+              <span className="text-agro-blue/70"></span> 
+              <span className="text-agro-gold">Voltar</span>
               <motion.span 
                 animate={{ opacity: [1, 0, 1] }} 
                 transition={{ repeat: Infinity, duration: 1 }} 
